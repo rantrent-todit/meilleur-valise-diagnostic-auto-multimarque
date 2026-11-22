@@ -69,6 +69,23 @@ const defaultAvis: AvisClient[] = [
 ];
 
 const avisAffiches = (rawAvisList && rawAvisList.length > 0) ? rawAvisList.slice(0, 3) : defaultAvis;
+
+const MAX_PREVIEW_LENGTH = 180;
+function getCommentPreview(comment: string) {
+  if (!comment || comment.length <= MAX_PREVIEW_LENGTH) {
+    return { isLong: false, preview: comment || '' };
+  }
+  const sub = comment.slice(0, MAX_PREVIEW_LENGTH);
+  const lastSpace = sub.lastIndexOf(' ');
+  const cleanSub = lastSpace > 100 ? sub.slice(0, lastSpace) : sub;
+  return { isLong: true, preview: cleanSub.trim() };
+}
+
+const gridColsClass = avisAffiches.length === 1 
+  ? "max-w-xl mx-auto" 
+  : avisAffiches.length === 2 
+    ? "grid sm:grid-cols-2 max-w-4xl mx-auto gap-5" 
+    : "grid sm:grid-cols-2 lg:grid-cols-3 gap-5";
 ---
 
 <section class="my-12 bg-slate-50/70 border border-slate-200/90 rounded-3xl p-6 sm:p-8 lg:p-10 shadow-xs">
@@ -123,7 +140,7 @@ const avisAffiches = (rawAvisList && rawAvisList.length > 0) ? rawAvisList.slice
   </div>
 
   <!-- CARTES D'AVIS AFFICHEES (STYLE CAPTURE VERIFIEE AVEC SIGNATURE AMAZON.FR) -->
-  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+  <div class={gridColsClass}>
     {avisAffiches.map((avis) => (
       <div class="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/90 shadow-xs flex flex-col justify-between hover:border-slate-300 transition-colors">
         <div>
@@ -164,10 +181,41 @@ const avisAffiches = (rawAvisList && rawAvisList.length > 0) ? rawAvisList.slice
             </h4>
           )}
 
-          <!-- Extrait commentaire -->
-          <p class="text-xs text-slate-600 leading-relaxed italic">
-            "{avis.commentaire}"
-          </p>
+          <!-- Extrait commentaire avec déploiement pur HTML (zero JS) -->
+          {(() => {
+            const { isLong, preview } = getCommentPreview(avis.commentaire);
+            if (!isLong) {
+              return (
+                <p class="text-xs text-slate-600 leading-relaxed italic">
+                  "{avis.commentaire}"
+                </p>
+              );
+            }
+            return (
+              <details class="group text-xs text-slate-600 leading-relaxed italic select-text">
+                <summary class="list-none cursor-pointer outline-hidden focus:outline-hidden [&::-webkit-details-marker]:hidden">
+                  <span class="group-open:hidden">
+                    "{preview}..."
+                    <span class="inline-flex items-center gap-0.5 ml-1.5 font-bold not-italic text-brand hover:underline text-[11px] cursor-pointer">
+                      Voir plus
+                      <svg class="w-3 h-3 text-brand inline flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </span>
+                  </span>
+                  <span class="hidden group-open:inline">
+                    "{avis.commentaire}"
+                    <span class="inline-flex items-center gap-0.5 ml-1.5 font-bold not-italic text-slate-400 hover:text-slate-600 hover:underline text-[10px] cursor-pointer">
+                      (Voir moins)
+                      <svg class="w-2.5 h-2.5 text-slate-400 inline flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
+                      </svg>
+                    </span>
+                  </span>
+                </summary>
+              </details>
+            );
+          })()}
 
           <!-- Photos clients éventuelles -->
           {avis.images && avis.images.length > 0 && (
@@ -207,3 +255,12 @@ const avisAffiches = (rawAvisList && rawAvisList.length > 0) ? rawAvisList.slice
     ))}
   </div>
 </section>
+
+<style>
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+  details summary {
+    list-style: none;
+  }
+</style>
