@@ -50,17 +50,17 @@ function extractSpecs(p: ProductItem) {
     <p class="text-slate-600 text-sm mt-1">{sousTitreSection}</p>
   </div>
 
-  <div class="md:overflow-x-auto pb-4 table-scrollbar">
-    <table class="w-full block md:table md:min-w-[700px] border-0 md:border-separate md:border-spacing-0 md:rounded-2xl md:border md:border-slate-200 bg-transparent md:bg-white shadow-none md:shadow-xs md:overflow-hidden text-left">
+  <div class="w-full md:overflow-x-auto pb-4 table-scrollbar">
+    <table class="w-full mx-auto block md:table md:min-w-[700px] border-collapse border-spacing-0 md:border-separate md:rounded-2xl md:border md:border-slate-200 bg-transparent md:bg-white shadow-none md:shadow-xs md:overflow-hidden text-left box-border">
       <thead class="hidden md:table-header-group">
-        <tr class="bg-slate-50 border-b border-slate-200 text-slate-700 text-xs uppercase tracking-wider">
-          <th class="py-4 px-4 font-bold border-b border-slate-200 w-1/3">Modèle analysé</th>
-          <th class="py-4 px-4 font-bold border-b border-slate-200 text-center w-1/6">Usage clé</th>
-          <th class="py-4 px-4 font-bold border-b border-slate-200 text-center w-1/5">Verdict Rédaction</th>
-          <th class="py-4 px-4 font-bold border-b border-slate-200 text-center w-1/4">Offre vérifiée</th>
+        <tr class="hidden md:table-row bg-slate-50 border-b border-slate-200 text-slate-700 text-xs uppercase tracking-wider">
+          <th class="hidden md:table-cell py-4 px-4 font-bold border-b border-slate-200 w-1/3">Modèle analysé</th>
+          <th class="hidden md:table-cell py-4 px-4 font-bold border-b border-slate-200 text-center w-1/6">Usage clé</th>
+          <th class="hidden md:table-cell py-4 px-4 font-bold border-b border-slate-200 text-center w-1/5">Verdict Rédaction</th>
+          <th class="hidden md:table-cell py-4 px-4 font-bold border-b border-slate-200 text-center w-1/4">Offre vérifiée</th>
         </tr>
       </thead>
-      <tbody class="block space-y-4 md:space-y-0 md:table-row-group md:divide-y md:divide-slate-100 text-sm">
+      <tbody class="w-full block space-y-4 md:space-y-0 md:table-row-group md:divide-y md:divide-slate-100 text-sm">
         {produitsAffiches.map((p, idx) => {
           const isWinner = idx === 0;
           const isSecond = idx === 1;
@@ -69,11 +69,11 @@ function extractSpecs(p: ProductItem) {
 
           return (
             <tr class:list={[
-              "flex flex-col bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs transition-all md:table-row md:border-0 md:rounded-none md:p-0 md:hover:bg-slate-50/70",
+              "w-full flex flex-col bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs transition-all box-border md:table-row md:border-0 md:rounded-none md:p-0 md:hover:bg-slate-50/70",
               isWinner ? "border-brand/40 ring-1 ring-brand/20 md:ring-0 md:bg-brand-light" : ""
             ]}>
               <!-- 1. Modèle Analysé : Image + Titre + Lien avis (ordre 2 sur mobile, 1ère colonne sur desktop) -->
-              <td class="order-2 block md:table-cell md:order-none py-3 md:py-4 px-0 md:px-4 align-middle">
+              <td class="order-2 w-full box-border block md:table-cell md:order-none py-3 md:py-4 px-0 md:px-4 align-middle">
                 <div class="flex items-center gap-3.5">
                   <a href={`/avis/${p.id}/`} class="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-slate-50/70 border border-slate-100 rounded-xl p-1.5 flex items-center justify-center overflow-hidden hover:opacity-90">
                     <img src={p.data.image_url} alt={p.data.titre} class="w-full h-full object-contain" loading="lazy" />
@@ -91,7 +91,7 @@ function extractSpecs(p: ProductItem) {
               </td>
 
               <!-- 2. Usage Clé : Spec ou Catégorie (ordre 3 sur mobile, 2e colonne sur desktop) -->
-              <td class="order-3 flex items-center justify-between py-2 md:py-4 px-0 md:px-4 align-middle md:table-cell md:order-none md:text-center">
+              <td class="order-3 w-full box-border flex items-center justify-between py-2.5 md:py-4 px-0 md:px-4 align-middle md:table-cell md:order-none md:text-center border-t border-slate-100 md:border-0">
                 <span class="md:hidden text-xs font-bold text-slate-500">Usage recommandé :</span>
                 <span class="inline-block px-2.5 py-1 bg-slate-100 text-slate-800 font-bold rounded-lg text-xs capitalize whitespace-nowrap">
                   {specLabel}
@@ -99,7 +99,7 @@ function extractSpecs(p: ProductItem) {
               </td>
 
               <!-- 3. Verdict Rédaction : Badges (ordre 1 sur mobile en haut de la carte, 3e colonne sur desktop) -->
-              <td class="order-1 flex items-center justify-between gap-2 pb-3 mb-1 border-b border-slate-100 md:table-cell md:order-none md:py-4 md:px-4 md:border-0 md:mb-0 md:text-center align-middle">
+              <td class="order-1 w-full box-border flex items-center justify-between gap-2 pb-3 mb-1 border-b border-slate-100 md:table-cell md:order-none md:py-4 md:px-4 md:border-0 md:mb-0 md:text-center align-middle">
                 <span class="md:hidden text-[10px] font-black uppercase tracking-wider text-slate-400">
                   Sélection Rédaction
                 </span>
@@ -140,7 +140,7 @@ function extractSpecs(p: ProductItem) {
               </td>
 
               <!-- 4. Offre vérifiée : Bouton Amazon (ordre 4 sur mobile, 4e colonne sur desktop) -->
-              <td class="order-4 block md:table-cell md:order-none pt-3 md:py-4 px-0 md:px-4 align-middle text-center">
+              <td class="order-4 w-full box-border block md:table-cell md:order-none pt-3 md:py-4 px-0 md:px-4 align-middle text-center border-t border-slate-100 md:border-0">
                 <BoutonAmazon 
                   href={p.data.lien_affiliation} 
                   variant={isWinner ? 'primary' : 'compact'}
