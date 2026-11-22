@@ -1,8 +1,334 @@
 {
   "folderName": "meilleur-valise-diagnostic-auto-multimarque",
+  "domain": "meilleur-valise-diagnostic-auto-multimarque.fr",
   "siteName": "AutoDiag Pro",
-  "status": "completed",
-  "completedAt": "2026-11-22T17:18:01.134Z",
-  "totalProducts": 24,
-  "completedCount": 24
+  "amazonTag": "amazonwp0b-21",
+  "status": "in_progress",
+  "startedAt": "2026-11-22T16:45:33.855Z",
+  "lastUpdated": "2026-11-22T17:18:39.013Z",
+  "totalProducts": 25,
+  "completedCount": 24,
+  "products": [
+    {
+      "asin": "B0GWPRS823",
+      "title": "Launch CReader CR329",
+      "titre_h1": "Launch CReader CR329",
+      "slug": "launch-cr329",
+      "categories": [
+        "lecteurs-obd2-economiques",
+        "valises-sans-abonnement-obligatoire"
+      ],
+      "status": "completed",
+      "words": 2390
+    },
+    {
+      "asin": "B0D14TD5N8",
+      "title": "Topdon ArtiDiag500 (AD500)",
+      "titre_h1": "Topdon ArtiDiag500 (AD500)",
+      "slug": "topdon-artidiag500",
+      "categories": [
+        "valises-multi-systemes-semi-pro",
+        "valises-specialisees-entretien-vidange",
+        "valises-sans-abonnement-obligatoire"
+      ],
+      "status": "completed",
+      "words": 2701
+    },
+    {
+      "asin": "B0DCZ6GFKR",
+      "title": "Topdon Carpal-A Bluetooth",
+      "titre_h1": "Topdon Carpal-A Bluetooth",
+      "slug": "topdon-carpal-a",
+      "categories": [
+        "adaptateurs-obd2-bluetooth-smartphone",
+        "valises-multi-systemes-semi-pro",
+        "valises-specialisees-entretien-vidange"
+      ],
+      "status": "completed",
+      "words": 2446
+    },
+    {
+      "asin": "B0BN7LV21P",
+      "title": "Kingbolen K7 (31 Services)",
+      "titre_h1": "Kingbolen K7 (31 Services)",
+      "slug": "kingbolen-k7",
+      "categories": [
+        "tablettes-diagnostic-tout-en-un",
+        "valises-bidirectionnelles-tests-actifs",
+        "valises-specialisees-entretien-vidange"
+      ],
+      "status": "completed",
+      "words": 2430
+    },
+    {
+      "asin": "B0FLVH6W7J",
+      "title": "Lecteur OBD2 Générique Multimarque",
+      "titre_h1": "Lecteur OBD2 Générique Multimarque",
+      "slug": "lecteur-obd2-generique",
+      "categories": [
+        "lecteurs-obd2-economiques",
+        "valises-sans-abonnement-obligatoire"
+      ],
+      "status": "completed",
+      "words": 2162
+    },
+    {
+      "asin": "B0H8YTP7P9",
+      "title": "Thinkcar Thinkscan 689BT",
+      "titre_h1": "Thinkcar Thinkscan 689BT",
+      "slug": "thinkcar-689bt",
+      "categories": [
+        "valises-bidirectionnelles-tests-actifs",
+        "valises-codage-programmation-ecu",
+        "valises-sans-abonnement-obligatoire"
+      ],
+      "status": "completed",
+      "words": 3125
+    },
+    {
+      "asin": "B0H74VLXKD",
+      "title": "Kingbolen K8 Pro (42+ Services)",
+      "titre_h1": "Kingbolen K8 Pro (42+ Services)",
+      "slug": "kingbolen-k8-pro",
+      "categories": [
+        "valises-professionnelles-atelier",
+        "valises-codage-programmation-ecu",
+        "tablettes-diagnostic-tout-en-un"
+      ],
+      "status": "completed",
+      "words": 2799
+    },
+    {
+      "asin": "B0GCGJHGDM",
+      "title": "Topdon ArtiDiag500 (AD500O)",
+      "titre_h1": "Topdon ArtiDiag500 (AD500O)",
+      "slug": "topdon-artidiag500-ad500o",
+      "categories": [
+        "valises-multi-systemes-semi-pro",
+        "valises-specialisees-entretien-vidange",
+        "valises-sans-abonnement-obligatoire"
+      ],
+      "status": "completed",
+      "words": 1723
+    },
+    {
+      "asin": "B0F6BFW6RG",
+      "title": "Thinkcar Thinkscan 662",
+      "titre_h1": "Thinkcar Thinkscan 662",
+      "slug": "thinkcar-662",
+      "categories": [
+        "valises-bidirectionnelles-tests-actifs",
+        "valises-multi-systemes-semi-pro",
+        "valises-sans-abonnement-obligatoire"
+      ],
+      "status": "completed",
+      "words": 2459
+    },
+    {
+      "asin": "B09SKQ6FV8",
+      "title": "Topdon ArtiDiag600S (9 Resets)",
+      "titre_h1": "Topdon ArtiDiag600S (9 Resets)",
+      "slug": "topdon-artidiag600s",
+      "categories": [
+        "valises-multi-systemes-semi-pro",
+        "valises-specialisees-entretien-vidange",
+        "valises-sans-abonnement-obligatoire"
+      ],
+      "status": "completed",
+      "words": 2083
+    },
+    {
+      "asin": "B0H6M6PNCJ",
+      "title": "Lecteur OBD2 Multimarque avec Test Batterie",
+      "titre_h1": "Lecteur OBD2 Multimarque avec Test Batterie",
+      "slug": "lecteur-obd2-multimarque-batterie",
+      "categories": [
+        "lecteurs-obd2-economiques",
+        "valises-sans-abonnement-obligatoire"
+      ],
+      "status": "error",
+      "words": 0
+    },
+    {
+      "asin": "B08TCGH4Y5",
+      "title": "Topdon ArtiDiag800 BT",
+      "titre_h1": "Topdon ArtiDiag800 BT",
+      "slug": "topdon-artidiag800-bt",
+      "categories": [
+        "tablettes-diagnostic-tout-en-un",
+        "valises-bidirectionnelles-tests-actifs",
+        "valises-specialisees-entretien-vidange"
+      ],
+      "status": "completed",
+      "words": 2379
+    },
+    {
+      "asin": "B08RJHFF2T",
+      "title": "Scanner OBD2 Bluetooth Multimarque",
+      "titre_h1": "Scanner OBD2 Bluetooth Multimarque",
+      "slug": "scanner-obd2-bluetooth",
+      "categories": [
+        "adaptateurs-obd2-bluetooth-smartphone",
+        "lecteurs-obd2-economiques"
+      ],
+      "status": "completed",
+      "words": 1853
+    },
+    {
+      "asin": "B07M9VM5Y9",
+      "title": "Autel MaxiCOM MK808S Bidirectionnel",
+      "titre_h1": "Autel MaxiCOM MK808S Bidirectionnel",
+      "slug": "autel-maxicom-mk808s",
+      "categories": [
+        "valises-bidirectionnelles-tests-actifs",
+        "tablettes-diagnostic-tout-en-un",
+        "valises-multi-systemes-semi-pro"
+      ],
+      "status": "completed",
+      "words": 2097
+    },
+    {
+      "asin": "B0CN423X8G",
+      "title": "Launch CRP123E V2.0 Elite (4 Systèmes)",
+      "titre_h1": "Launch CRP123E V2.0 Elite (4 Systèmes)",
+      "slug": "launch-crp123e-v2",
+      "categories": [
+        "valises-multi-systemes-semi-pro",
+        "tablettes-diagnostic-tout-en-un",
+        "valises-sans-abonnement-obligatoire"
+      ],
+      "status": "completed",
+      "words": 2304
+    },
+    {
+      "asin": "B07RK9GCK3",
+      "title": "Launch CRP129X V2.0 (4 Systèmes, 12 Services)",
+      "titre_h1": "Launch CRP129X V2.0 (4 Systèmes, 12 Services)",
+      "slug": "launch-crp129x-v2",
+      "categories": [
+        "valises-multi-systemes-semi-pro",
+        "valises-specialisees-entretien-vidange",
+        "tablettes-diagnostic-tout-en-un"
+      ],
+      "status": "completed",
+      "words": 2052
+    },
+    {
+      "asin": "B0H8YQC6NN",
+      "title": "Mucar 682 Bidirectionnel Tous Systèmes",
+      "titre_h1": "Mucar 682 Bidirectionnel Tous Systèmes",
+      "slug": "mucar-682",
+      "categories": [
+        "valises-bidirectionnelles-tests-actifs",
+        "valises-sans-abonnement-obligatoire",
+        "tablettes-diagnostic-tout-en-un"
+      ],
+      "status": "completed",
+      "words": 2410
+    },
+    {
+      "asin": "B0DWWZ5YR1",
+      "title": "Topdon AD600 Elite Tous Systèmes",
+      "titre_h1": "Topdon AD600 Elite Tous Systèmes",
+      "slug": "topdon-ad600-elite",
+      "categories": [
+        "valises-sans-abonnement-obligatoire",
+        "valises-specialisees-entretien-vidange",
+        "tablettes-diagnostic-tout-en-un"
+      ],
+      "status": "completed",
+      "words": 2372
+    },
+    {
+      "asin": "B0H4PYM3PR",
+      "title": "Thinkcar 672 Bidirectionnel Tous Systèmes",
+      "titre_h1": "Thinkcar 672 Bidirectionnel Tous Systèmes",
+      "slug": "thinkcar-672",
+      "categories": [
+        "valises-bidirectionnelles-tests-actifs",
+        "valises-codage-programmation-ecu",
+        "valises-sans-abonnement-obligatoire"
+      ],
+      "status": "completed",
+      "words": 3107
+    },
+    {
+      "asin": "B0H2DS7FY2",
+      "title": "Thinkcar ThinkScan 662 (4 Systèmes, 12 Services)",
+      "titre_h1": "Thinkcar ThinkScan 662 (4 Systèmes, 12 Services)",
+      "slug": "thinkcar-thinkscan-662",
+      "categories": [
+        "valises-bidirectionnelles-tests-actifs",
+        "valises-multi-systemes-semi-pro",
+        "valises-sans-abonnement-obligatoire"
+      ],
+      "status": "completed",
+      "words": 2740
+    },
+    {
+      "asin": "B0C5D1YM1F",
+      "title": "Launch X431 CRP919XBT Bluetooth",
+      "titre_h1": "Launch X431 CRP919XBT Bluetooth",
+      "slug": "launch-x431-crp919xbt",
+      "categories": [
+        "valises-bidirectionnelles-tests-actifs",
+        "valises-professionnelles-atelier",
+        "tablettes-diagnostic-tout-en-un"
+      ],
+      "status": "completed",
+      "words": 2566
+    },
+    {
+      "asin": "B08697K4WH",
+      "title": "Launch CRP 129 Evo (4 Systèmes)",
+      "titre_h1": "Launch CRP 129 Evo (4 Systèmes)",
+      "slug": "launch-crp-129-evo",
+      "categories": [
+        "valises-multi-systemes-semi-pro",
+        "valises-specialisees-entretien-vidange",
+        "valises-sans-abonnement-obligatoire"
+      ],
+      "status": "completed",
+      "words": 2025
+    },
+    {
+      "asin": "B08X2Q2X4B",
+      "title": "Topdon ArtiDiag800 BT2 Bluetooth Tous Systèmes",
+      "titre_h1": "Topdon ArtiDiag800 BT2 Bluetooth Tous Systèmes",
+      "slug": "topdon-artidiag800-bt2",
+      "categories": [
+        "valises-bidirectionnelles-tests-actifs",
+        "valises-sans-abonnement-obligatoire",
+        "tablettes-diagnostic-tout-en-un"
+      ],
+      "status": "completed",
+      "words": 2386
+    },
+    {
+      "asin": "B0C85RM3RW",
+      "title": "Launch X431 Pro Elite Tous Systèmes",
+      "titre_h1": "Launch X431 Pro Elite Tous Systèmes",
+      "slug": "launch-x431-pro-elite",
+      "categories": [
+        "valises-professionnelles-atelier",
+        "valises-codage-programmation-ecu",
+        "tablettes-diagnostic-tout-en-un"
+      ],
+      "status": "completed",
+      "words": 2223
+    },
+    {
+      "asin": "B092MH5KRQ",
+      "title": "TOPDON ArtiDiag500 (4 Systèmes)",
+      "titre_h1": "TOPDON ArtiDiag500 (4 Systèmes)",
+      "slug": "topdon-artidiag500",
+      "categories": [
+        "valises-multi-systemes-semi-pro",
+        "valises-specialisees-entretien-vidange",
+        "valises-sans-abonnement-obligatoire"
+      ],
+      "status": "pending",
+      "words": 0
+    }
+  ]
 }
