@@ -164,11 +164,11 @@ const websiteSchema = {
       {topPickProduct && (
         <div class="lg:col-span-5">
           <div class="bg-white border-2 border-brand rounded-3xl p-5 sm:p-6 shadow-xl relative overflow-hidden">
-            <div class="flex items-center justify-between mb-3.5">
-              <span class="text-[10px] sm:text-[11px] font-black uppercase tracking-wider bg-brand text-white px-3 py-1 rounded-full shadow-sm">
+            <div class="flex items-center justify-between gap-2 mb-3.5">
+              <span class="text-[10px] sm:text-[11px] font-black uppercase tracking-wider bg-brand text-white px-2.5 py-1 rounded-full shadow-sm whitespace-nowrap">
                 🏆 Recommandation N°1
               </span>
-              <span class="text-[11px] sm:text-xs font-black uppercase tracking-wider text-brand">Coup de Cœur Rédaction</span>
+              <span class="text-[10px] sm:text-xs font-black uppercase tracking-wider text-brand whitespace-nowrap">Coup de Cœur<span class="hidden sm:inline"> Rédaction</span></span>
             </div>
 
             <div class="w-full h-40 sm:h-48 bg-slate-50/70 rounded-2xl p-3 sm:p-4 flex items-center justify-center mb-4 border border-slate-100">
@@ -252,14 +252,14 @@ const websiteSchema = {
   <!-- PARCOURIR PAR CATÉGORIE -->
   {allCategories.length > 0 && (
     <section class="my-14">
-      <div class="flex items-center justify-between mb-8">
+      <div class="flex flex-wrap sm:flex-nowrap items-baseline sm:items-center justify-between gap-2 mb-6 sm:mb-8">
         <div>
           <span class="text-xs font-black uppercase tracking-wider text-brand">Catégories & Usages</span>
           <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1 !my-0">
             Trouvez selon votre besoin
           </h2>
         </div>
-        <a href="/comparatifs/" class="text-xs sm:text-sm font-extrabold text-brand hover:text-brand-hover">
+        <a href="/comparatifs/" class="text-xs sm:text-sm font-extrabold text-brand hover:text-brand-hover whitespace-nowrap flex-shrink-0">
           Toutes les catégories &rarr;
         </a>
       </div>
