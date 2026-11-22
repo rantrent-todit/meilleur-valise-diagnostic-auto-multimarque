@@ -3,7 +3,7 @@
   "domain": "meilleur-valise-diagnostic-auto-multimarque.fr",
   "siteName": "AutoDiag Pro",
   "amazonTag": "amazonwp0b-21",
-  "status": "in_progress",
+  "status": "completed",
   "startedAt": "2026-11-22T16:45:33.855Z",
   "lastUpdated": "2026-11-22T17:18:39.013Z",
   "totalProducts": 25,
@@ -330,5 +330,20 @@
       "status": "pending",
       "words": 0
     }
-  ]
+  ],
+  "completedAt": "2026-11-22T17:18:43.137Z",
+  "git": {
+    "success": true,
+    "createdNewCommit": true,
+    "nothingToCommit": false,
+    "alreadyUpToDate": false,
+    "commitSha": "82cedb91804dcf45f84a4faed8d8dbed044ab0d5",
+    "commitShortSha": "82cedb9",
+    "commitMessage": "feat(site): initialisation du site AutoDiag Pro (25 fiches, 0 comparatifs)",
+    "commitUrl": "https://github.com/rantrent-todit/meilleur-valise-diagnostic-auto-multimarque/commit/82cedb91804dcf45f84a4faed8d8dbed044ab0d5",
+    "repoUrl": "https://github.com/rantrent-todit/meilleur-valise-diagnostic-auto-multimarque",
+    "repoName": "rantrent-todit/meilleur-valise-diagnostic-auto-multimarque",
+    "isVerifiedOnRemote": true,
+    "filesChangedCount": 2
+  }
 }
