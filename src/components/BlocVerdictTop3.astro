@@ -49,9 +49,9 @@ const third = top3[2] || top3[0];
   <div class="grid lg:grid-cols-3 gap-6 items-stretch">
     <!-- N°2 : Rapport Qualité / Prix (À gauche sur Desktop) -->
     {second && (
-      <div class="bg-slate-50/60 rounded-2xl border border-slate-200/80 p-6 flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow order-2 lg:order-1">
+      <div class="w-full max-w-md mx-auto lg:max-w-none bg-slate-50/60 rounded-2xl border border-slate-200/80 p-6 flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow order-2 lg:order-1">
         <div>
-          <div class="flex items-center justify-between gap-1.5 mb-4">
+          <div class="flex items-center justify-center gap-2 mb-4">
             <span class="text-[11px] sm:text-xs font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full whitespace-nowrap">
               🥈 Rapport Qualité-Prix
             </span>
@@ -62,13 +62,13 @@ const third = top3[2] || top3[0];
             <img src={second.data.image_url} alt={second.data.titre} class="w-full h-full object-contain" loading="lazy" />
           </div>
 
-          <h3 class="font-extrabold text-lg text-slate-900 mb-2 leading-snug !my-0">
+          <h3 class="font-extrabold text-lg text-slate-900 mb-2 leading-snug !my-0 text-center">
             <a href={`/avis/${second.id}/`} class="hover:text-brand transition-colors">
               {second.data.titre}
             </a>
           </h3>
 
-          <p class="text-xs text-slate-600 mb-4 line-clamp-3 leading-relaxed mt-2">
+          <p class="text-xs text-slate-600 mb-4 line-clamp-3 leading-relaxed mt-2 text-center mx-auto max-w-sm">
             {second.data.description_courte}
           </p>
         </div>
@@ -92,13 +92,13 @@ const third = top3[2] || top3[0];
 
     <!-- N°1 : Le Grand Gagnant (Au centre, mis en valeur Bento) -->
     {winner && (
-      <div class="bg-white rounded-3xl border-2 border-brand p-6 sm:p-7 flex flex-col justify-between shadow-xl relative order-1 lg:order-2 lg:-translate-y-2">
+      <div class="w-full max-w-md mx-auto lg:max-w-none bg-white rounded-3xl border-2 border-brand p-6 sm:p-7 flex flex-col justify-between shadow-xl relative order-1 lg:order-2 lg:-translate-y-2">
         <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-brand to-brand-accent text-white text-[11px] font-black uppercase tracking-widest px-4 py-1 rounded-full shadow-md whitespace-nowrap">
           🏆 Meilleur Choix Global
         </div>
 
         <div>
-          <div class="flex items-center justify-between gap-2 mb-4 mt-2">
+          <div class="flex items-center justify-center gap-2 mb-4 mt-2">
             <span class="text-[11px] sm:text-xs font-black uppercase tracking-wider text-brand whitespace-nowrap">
               🏆 N°1 de nos tests
             </span>
@@ -109,13 +109,13 @@ const third = top3[2] || top3[0];
             <img src={winner.data.image_url} alt={winner.data.titre} class="w-full h-full object-contain" loading="lazy" />
           </div>
 
-          <h3 class="font-black text-xl text-slate-900 mb-2 leading-snug !my-0">
+          <h3 class="font-black text-xl text-slate-900 mb-2 leading-snug !my-0 text-center">
             <a href={`/avis/${winner.id}/`} class="hover:text-brand transition-colors">
               {winner.data.titre}
             </a>
           </h3>
 
-          <p class="text-xs sm:text-sm text-slate-600 mb-6 leading-relaxed mt-2">
+          <p class="text-xs sm:text-sm text-slate-600 mb-6 leading-relaxed mt-2 text-center mx-auto max-w-sm">
             {winner.data.description_courte}
           </p>
         </div>
@@ -140,9 +140,9 @@ const third = top3[2] || top3[0];
 
     <!-- N°3 : Le Choix Expert (À droite sur Desktop) -->
     {third && (
-      <div class="bg-slate-50/60 rounded-2xl border border-slate-200/80 p-6 flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow order-3">
+      <div class="w-full max-w-md mx-auto lg:max-w-none bg-slate-50/60 rounded-2xl border border-slate-200/80 p-6 flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow order-3">
         <div>
-          <div class="flex items-center justify-between gap-1.5 mb-4">
+          <div class="flex items-center justify-center gap-2 mb-4">
             <span class="text-[11px] sm:text-xs font-black uppercase tracking-wider bg-slate-900 text-white px-2.5 py-1 rounded-full whitespace-nowrap">
               🥉 Choix Haut de Gamme
             </span>
@@ -153,13 +153,13 @@ const third = top3[2] || top3[0];
             <img src={third.data.image_url} alt={third.data.titre} class="w-full h-full object-contain" loading="lazy" />
           </div>
 
-          <h3 class="font-extrabold text-lg text-slate-900 mb-2 leading-snug !my-0">
+          <h3 class="font-extrabold text-lg text-slate-900 mb-2 leading-snug !my-0 text-center">
             <a href={`/avis/${third.id}/`} class="hover:text-brand transition-colors">
               {third.data.titre}
             </a>
           </h3>
 
-          <p class="text-xs text-slate-600 mb-4 line-clamp-3 leading-relaxed mt-2">
+          <p class="text-xs text-slate-600 mb-4 line-clamp-3 leading-relaxed mt-2 text-center mx-auto max-w-sm">
             {third.data.description_courte}
           </p>
         </div>
