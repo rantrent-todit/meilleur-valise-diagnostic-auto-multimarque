@@ -7,13 +7,14 @@ export default {
     extend: {
       colors: {
         brand: {
-          DEFAULT: 'var(--color-primary, #ea580c)',
-          hover: 'var(--color-primary-hover, #c2410c)',
-          accent: 'var(--color-accent, #ea580c)',
+          DEFAULT: 'var(--color-primary, #1e40af)',
+          hover: 'var(--color-primary-hover, #1d4ed8)',
+          accent: 'var(--color-accent, #f59e0b)',
+          light: 'var(--color-primary-light, rgba(30, 64, 175, 0.08))',
+          border: 'var(--color-primary-border, rgba(30, 64, 175, 0.2))',
           dark: '#0c1e28',
           sand: '#fafaf7',
           surface: '#ffffff',
-          border: '#e2e8f0',
         }
       },
       fontFamily: {

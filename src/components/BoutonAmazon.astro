@@ -18,10 +18,10 @@ const {
 const baseStyles = "inline-flex flex-col items-center justify-center font-bold transition-all duration-200 text-center select-none active:scale-[0.98] group relative";
 
 const variantStyles = {
-  primary: "bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-7 py-3.5 rounded-xl shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5",
-  winner: "bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-8 py-4 rounded-xl shadow-xl shadow-orange-500/30 hover:shadow-orange-500/50 hover:-translate-y-1 cta-pulse",
-  compact: "bg-orange-500 hover:bg-orange-600 text-white px-4 py-2.5 text-sm rounded-lg shadow-md hover:shadow-lg shadow-orange-500/20",
-  outline: "bg-white hover:bg-orange-50 text-orange-600 border-2 border-orange-500 px-6 py-3 rounded-xl hover:-translate-y-0.5 shadow-sm"
+  primary: "bg-gradient-to-r from-[var(--color-primary,#1e40af)] to-[var(--color-primary-hover,#1d4ed8)] hover:brightness-110 text-white px-6 sm:px-7 py-3 sm:py-3.5 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5",
+  winner: "badge-winner hover:brightness-110 text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl shadow-xl hover:-translate-y-0.5 cta-pulse",
+  compact: "bg-[var(--color-primary,#1e40af)] hover:bg-[var(--color-primary-hover,#1d4ed8)] text-white px-3.5 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg shadow-md hover:shadow-lg",
+  outline: "bg-white hover:bg-slate-50 text-[var(--color-primary,#1e40af)] border-2 border-[var(--color-primary,#1e40af)] px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl hover:-translate-y-0.5 shadow-sm"
 };
 ---
 

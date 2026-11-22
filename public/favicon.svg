@@ -2,15 +2,15 @@
   <defs>
     <!-- Dégradé principal de fond diagonal -->
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1E3A8A" />
-      <stop offset="60%" stop-color="#00004a" />
+      <stop offset="0%" stop-color="#1e40af" />
+      <stop offset="60%" stop-color="#00006f" />
       <stop offset="100%" stop-color="#090d16" />
     </linearGradient>
 
     <!-- Lueur subtile accent au sommet -->
     <radialGradient id="topGlow" cx="25%" cy="15%" r="70%">
-      <stop offset="0%" stop-color="#F97316" stop-opacity="0.55" />
-      <stop offset="50%" stop-color="#1E3A8A" stop-opacity="0.1" />
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.55" />
+      <stop offset="50%" stop-color="#1e40af" stop-opacity="0.1" />
       <stop offset="100%" stop-color="#000000" stop-opacity="0" />
     </radialGradient>
 
@@ -64,13 +64,27 @@
   <!-- Éléments vectoriels de la thématique -->
   <g filter="url(#softShadow)">
     
-    <g transform="translate(128, 128) scale(1.15) translate(-128, -128)">
-      <!-- Écusson de confiance -->
-      <path d="M128 36 L196 64 C196 142 162 192 128 214 C94 192 60 142 60 64 Z" fill="rgba(255,255,255,0.16)" stroke="#ffffff" stroke-width="12" stroke-linejoin="round" />
-      <!-- Coche de vérification d'expert -->
-      <path d="M96 122 L118 144 L162 98" fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
-      <!-- Étoile d'or au sommet -->
-      <polygon points="128,52 133,65 147,65 136,73 140,86 128,78 116,86 120,73 109,65 123,65" fill="#fbbf24" stroke="none" />
+    <g transform="translate(128, 128) scale(1.12) translate(-128, -128)">
+      <!-- Câble OBD supérieur -->
+      <path d="M128 34 L128 48 M112 34 L144 34" stroke="#ffffff" stroke-width="8" stroke-linecap="round" fill="none" />
+      <!-- Boîtier robuste de la valise diagnostic -->
+      <rect x="46" y="48" width="164" height="172" rx="20" fill="rgba(255,255,255,0.16)" stroke="#ffffff" stroke-width="12" />
+      <!-- Renforts d'angle antichoc en caoutchouc -->
+      <path d="M46 72 L46 56 C46 51 51 48 56 48 L72 48" stroke="#38bdf8" stroke-width="12" stroke-linecap="round" fill="none" />
+      <path d="M210 72 L210 56 C210 51 205 48 200 48 L184 48" stroke="#38bdf8" stroke-width="12" stroke-linecap="round" fill="none" />
+      <path d="M46 196 L46 212 C46 217 51 220 56 220 L72 220" stroke="#38bdf8" stroke-width="12" stroke-linecap="round" fill="none" />
+      <path d="M210 196 L210 212 C210 217 205 220 200 220 L184 220" stroke="#38bdf8" stroke-width="12" stroke-linecap="round" fill="none" />
+      <!-- Écran LCD haute résolution -->
+      <rect x="64" y="66" width="128" height="84" rx="10" fill="#09131f" stroke="#ffffff" stroke-width="6" />
+      <!-- Onde ECG / Diagnostic moteur en direct -->
+      <path d="M72 108 L94 108 L104 88 L116 128 L128 98 L138 114 L146 108 L184 108" fill="none" stroke="#22c55e" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+      <!-- Icône moteur / check engine discret au sommet de l'écran -->
+      <circle cx="80" cy="80" r="4" fill="#ef4444" />
+      <circle cx="94" cy="80" r="4" fill="#fbbf24" />
+      <!-- Clavier de navigation & Touches de validation -->
+      <circle cx="92" cy="184" r="14" fill="rgba(255,255,255,0.25)" stroke="#ffffff" stroke-width="4" />
+      <rect x="132" y="172" width="22" height="24" rx="6" fill="#38bdf8" />
+      <rect x="162" y="172" width="22" height="24" rx="6" fill="#ef4444" />
     </g>
   
   </g>

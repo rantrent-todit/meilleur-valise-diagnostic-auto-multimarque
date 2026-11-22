@@ -124,28 +124,28 @@ const websiteSchema = {
   <script type="application/ld+json" is:inline slot="extra-head" set:html={JSON.stringify(websiteSchema)} />
 
   <!-- HERO SECTION CONVERSION BENTO -->
-  <section class="py-8 md:py-16">
-    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+  <section class="py-5 sm:py-7 md:py-10">
+    <div class="grid lg:grid-cols-12 gap-6 lg:gap-10 items-center">
       <div class="lg:col-span-7 text-left">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-100 border border-orange-200 text-orange-800 text-xs font-black uppercase tracking-wider mb-6">
-          <svg class="w-4 h-4 text-orange-600" viewBox="0 0 20 20" fill="currentColor">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-light border border-brand/20 text-brand text-[11px] sm:text-xs font-black uppercase tracking-wider mb-3 sm:mb-4">
+          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-brand" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
           </svg>
           Guide Comparatif & Tests Vérifiés Indépendants
         </div>
 
-        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.08] mb-6">
-          {homeH1} : <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-600 to-orange-500">{homeTagline}</span>
+        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-3 sm:mb-4">
+          {homeH1} <span class="block text-lg sm:text-xl md:text-2xl lg:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-brand to-brand-accent mt-1 sm:mt-1.5">{homeTagline}</span>
         </h1>
 
-        <p class="text-base sm:text-lg text-slate-600 mb-8 max-w-xl leading-relaxed">
+        <p class="text-sm sm:text-base text-slate-600 mb-5 sm:mb-6 max-w-xl leading-relaxed">
           {homeDescription}
         </p>
 
-        <div class="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center">
           <a 
             href="#podium" 
-            class="px-7 py-4 bg-slate-900 hover:bg-slate-800 text-white font-extrabold rounded-xl shadow-lg transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 text-sm"
+            class="px-6 py-3 sm:px-7 sm:py-3.5 bg-slate-900 hover:bg-brand text-white font-extrabold rounded-xl shadow-md transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 text-xs sm:text-sm"
           >
             <span>Voir le Podium des Gagnants</span>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -154,7 +154,7 @@ const websiteSchema = {
           </a>
           <a 
             href="#guide-achat" 
-            class="px-7 py-4 bg-white text-slate-800 font-extrabold border border-slate-300 rounded-xl hover:bg-slate-50 transition-all text-sm flex items-center justify-center"
+            class="px-5 py-2.5 sm:px-6 sm:py-3.5 bg-white text-slate-800 font-extrabold border border-slate-300 rounded-xl hover:bg-slate-50 transition-all text-xs sm:text-sm flex items-center justify-center"
           >
             Consulter le guide complet
           </a>
@@ -163,15 +163,15 @@ const websiteSchema = {
 
       {topPickProduct && (
         <div class="lg:col-span-5">
-          <div class="bg-white border-2 border-orange-500 rounded-3xl p-6 sm:p-7 shadow-xl relative overflow-hidden">
-            <div class="flex items-center justify-between mb-4">
-              <span class="text-[11px] font-black uppercase tracking-wider bg-orange-600 text-white px-3 py-1 rounded-full shadow-sm">
+          <div class="bg-white border-2 border-brand rounded-3xl p-5 sm:p-6 shadow-xl relative overflow-hidden">
+            <div class="flex items-center justify-between mb-3.5">
+              <span class="text-[10px] sm:text-[11px] font-black uppercase tracking-wider bg-brand text-white px-3 py-1 rounded-full shadow-sm">
                 🏆 Recommandation N°1
               </span>
-              <span class="text-xs font-black uppercase tracking-wider text-orange-600">Coup de Cœur Rédaction</span>
+              <span class="text-[11px] sm:text-xs font-black uppercase tracking-wider text-brand">Coup de Cœur Rédaction</span>
             </div>
 
-            <div class="w-full h-52 bg-slate-50/70 rounded-2xl p-4 flex items-center justify-center mb-5 border border-slate-100">
+            <div class="w-full h-40 sm:h-48 bg-slate-50/70 rounded-2xl p-3 sm:p-4 flex items-center justify-center mb-4 border border-slate-100">
               <img 
                 src={topPickProduct.data.image_url} 
                 alt={topPickProduct.data.titre} 
@@ -180,13 +180,13 @@ const websiteSchema = {
               />
             </div>
 
-            <h3 class="font-extrabold text-lg text-slate-900 mb-2 leading-snug !my-0">
-              <a href={`/avis/${topPickProduct.id}/`} class="hover:text-orange-600 transition-colors">
+            <h3 class="font-extrabold text-base sm:text-lg text-slate-900 mb-1.5 leading-snug !my-0">
+              <a href={`/avis/${topPickProduct.id}/`} class="hover:text-brand transition-colors">
                 {topPickProduct.data.titre}
               </a>
             </h3>
 
-            <p class="text-xs text-slate-600 mb-5 line-clamp-2 leading-relaxed mt-2">
+            <p class="text-xs text-slate-600 mb-4 line-clamp-2 leading-relaxed mt-1">
               {topPickProduct.data.description_courte}
             </p>
 
@@ -204,26 +204,26 @@ const websiteSchema = {
   </section>
 
   <!-- SOMMAIRE RAPIDE DE NAVIGATION PILIER -->
-  <section class="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 my-8 shadow-xl">
+  <section class="bg-slate-900 text-white rounded-3xl p-5 sm:p-7 my-6 sm:my-8 shadow-xl">
     <div class="max-w-4xl">
-      <span class="text-xs font-black uppercase tracking-wider text-orange-400">Navigation directe</span>
-      <h2 class="text-xl sm:text-2xl font-black text-white mt-1 mb-4 !my-0">
+      <span class="text-xs font-black uppercase tracking-wider text-brand-accent">Navigation directe</span>
+      <h2 class="text-xl sm:text-2xl font-black text-white mt-1 mb-3 !my-0">
         Accès direct aux sélections et guides d'experts
       </h2>
-      <p class="text-xs sm:text-sm text-slate-300 mb-6 leading-relaxed">
+      <p class="text-xs sm:text-sm text-slate-300 mb-5 leading-relaxed">
         Accédez rapidement à nos tests, au tableau comparatif complet ou approfondissez vos critères de choix grâce à notre dossier conseil.
       </p>
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-extrabold">
-        <a href="#podium" class="bg-slate-800 hover:bg-orange-600 text-slate-100 hover:text-white p-3.5 rounded-xl border border-slate-700/80 transition-all text-center">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 text-xs font-extrabold">
+        <a href="#podium" class="bg-slate-800 hover:bg-brand text-slate-100 hover:text-white p-3 rounded-xl border border-slate-700/80 transition-all text-center">
           🏆 Top 3 Sélections
         </a>
-        <a href="#tableau-comparatif" class="bg-slate-800 hover:bg-orange-600 text-slate-100 hover:text-white p-3.5 rounded-xl border border-slate-700/80 transition-all text-center">
+        <a href="#tableau-comparatif" class="bg-slate-800 hover:bg-brand text-slate-100 hover:text-white p-3 rounded-xl border border-slate-700/80 transition-all text-center">
           📊 Tableau Top 3
         </a>
-        <a href="#guide-achat" class="bg-slate-800 hover:bg-orange-600 text-slate-100 hover:text-white p-3.5 rounded-xl border border-slate-700/80 transition-all text-center">
+        <a href="#guide-achat" class="bg-slate-800 hover:bg-brand text-slate-100 hover:text-white p-3 rounded-xl border border-slate-700/80 transition-all text-center">
           📖 Guide d'Achat
         </a>
-        <a href="#faq" class="bg-slate-800 hover:bg-orange-600 text-slate-100 hover:text-white p-3.5 rounded-xl border border-slate-700/80 transition-all text-center">
+        <a href="#faq" class="bg-slate-800 hover:bg-brand text-slate-100 hover:text-white p-3 rounded-xl border border-slate-700/80 transition-all text-center">
           ❓ FAQ Complète
         </a>
       </div>
@@ -251,15 +251,15 @@ const websiteSchema = {
 
   <!-- PARCOURIR PAR CATÉGORIE -->
   {allCategories.length > 0 && (
-    <section class="my-16">
+    <section class="my-14">
       <div class="flex items-center justify-between mb-8">
         <div>
-          <span class="text-xs font-black uppercase tracking-wider text-orange-600">Catégories & Usages</span>
+          <span class="text-xs font-black uppercase tracking-wider text-brand">Catégories & Usages</span>
           <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1 !my-0">
             Trouvez selon votre besoin
           </h2>
         </div>
-        <a href="/comparatifs/" class="text-xs sm:text-sm font-extrabold text-orange-600 hover:text-orange-700">
+        <a href="/comparatifs/" class="text-xs sm:text-sm font-extrabold text-brand hover:text-brand-hover">
           Toutes les catégories &rarr;
         </a>
       </div>
@@ -268,15 +268,15 @@ const websiteSchema = {
         {allCategories.slice(0, 6).map(cat => (
           <a 
             href={`/comparatifs/${cat.slug}/`}
-            class="bg-white border border-slate-200/90 rounded-2xl p-5 hover:border-orange-500 hover:shadow-lg transition-all flex items-center justify-between group"
+            class="bg-white border border-slate-200/90 rounded-2xl p-5 hover:border-brand hover:shadow-lg transition-all flex items-center justify-between group"
           >
             <div>
-              <h3 class="font-bold text-base text-slate-900 group-hover:text-orange-600 capitalize leading-tight !my-0">
+              <h3 class="font-bold text-base text-slate-900 group-hover:text-brand capitalize leading-tight !my-0">
                 {cat.name}
               </h3>
               <span class="text-xs text-slate-500 mt-1 inline-block">Consulter la sélection</span>
             </div>
-            <span class="text-orange-600 group-hover:translate-x-1 transition-transform font-bold">&rarr;</span>
+            <span class="text-brand group-hover:translate-x-1 transition-transform font-bold">&rarr;</span>
           </a>
         ))}
       </div>
@@ -284,9 +284,9 @@ const websiteSchema = {
   )}
 
   <!-- GUIDE D'ACHAT PILIER SEO TEXTUEL -->
-  <article id="guide-achat" class="my-20 bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-10 lg:p-12 shadow-sm scroll-mt-24">
-    <header class="max-w-3xl mb-12">
-      <span class="text-xs font-black uppercase tracking-wider bg-orange-100 text-orange-800 px-3 py-1 rounded-full inline-block mb-3">
+  <article id="guide-achat" class="my-16 bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-10 lg:p-12 shadow-sm scroll-mt-24">
+    <header class="max-w-3xl mb-10">
+      <span class="text-xs font-black uppercase tracking-wider bg-brand-light text-brand px-3 py-1 rounded-full inline-block mb-3">
         Critères d'Évaluation Technique
       </span>
       <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight !my-0">
@@ -340,7 +340,7 @@ const websiteSchema = {
   <section id="faq" class="my-16 scroll-mt-24">
     <div class="max-w-4xl mx-auto">
       <div class="text-center mb-10">
-        <span class="text-xs font-black uppercase tracking-wider text-orange-600 bg-orange-100 px-3 py-1 rounded-full inline-block mb-3">
+        <span class="text-xs font-black uppercase tracking-wider text-brand bg-brand-light px-3 py-1 rounded-full inline-block mb-3">
           Questions Fréquentes
         </span>
         <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight !my-0">
@@ -353,15 +353,15 @@ const websiteSchema = {
 
       <div class="space-y-4">
         {faqItems.map((item, idx) => (
-          <details class="group bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 transition-all [&_summary::-webkit-details-marker]:hidden open:border-orange-500 open:shadow-sm">
+          <details class="group bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 transition-all [&_summary::-webkit-details-marker]:hidden open:border-brand open:shadow-sm">
             <summary class="flex items-center justify-between cursor-pointer font-extrabold text-slate-900 text-sm sm:text-base select-none">
               <span class="flex items-center gap-3">
-                <span class="w-6 h-6 rounded-full bg-orange-100 text-orange-700 font-black text-xs flex items-center justify-center flex-shrink-0">
+                <span class="w-6 h-6 rounded-full bg-brand-light text-brand font-black text-xs flex items-center justify-center flex-shrink-0">
                   {idx + 1}
                 </span>
                 {item.q}
               </span>
-              <span class="w-6 h-6 flex items-center justify-center text-slate-400 group-open:text-orange-600 group-open:rotate-180 transition-transform">
+              <span class="w-6 h-6 flex items-center justify-center text-slate-400 group-open:text-brand group-open:rotate-180 transition-transform">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
                 </svg>
@@ -386,7 +386,7 @@ const websiteSchema = {
             Derniers tests détaillés
           </h2>
         </div>
-        <a href="/avis/" class="text-sm font-extrabold text-orange-600 hover:text-orange-700">
+        <a href="/avis/" class="text-sm font-extrabold text-brand hover:text-brand-hover">
           Tous les tests &rarr;
         </a>
       </div>

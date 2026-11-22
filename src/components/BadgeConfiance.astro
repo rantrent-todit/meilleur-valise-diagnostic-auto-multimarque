@@ -30,27 +30,27 @@ const piliers = [
 ---
 
 <section class="my-16 bg-slate-900 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden">
-  <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-orange-600/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-brand/10 rounded-full blur-3xl pointer-events-none"></div>
 
   <div class="max-w-3xl mb-10">
-    <span class="inline-block text-xs font-black uppercase tracking-wider bg-orange-500/20 text-orange-400 border border-orange-400/30 px-3 py-1 rounded-full mb-3">
+    <span class="inline-block text-xs font-black uppercase tracking-wider bg-brand-light text-brand-accent border border-brand-border px-3 py-1 rounded-full mb-3">
       Exigence & Rigueur Technique
     </span>
     <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight !my-0">
       {titre}
     </h2>
     <p class="text-slate-300 text-sm sm:text-base mt-2 leading-relaxed">
-      Chaque paire de jumelles mentionnée sur notre guide fait l'objet d'un examen minutieux selon 4 critères techniques fondamentaux.
+      Chaque équipement mentionné sur notre guide fait l'objet d'un examen minutieux selon 4 critères techniques fondamentaux.
     </p>
   </div>
 
   <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
     {piliers.map((pilier, idx) => (
       <div class="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-5 hover:border-slate-600 transition-colors">
-        <div class="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center mb-4">
+        <div class="w-10 h-10 rounded-xl bg-brand-light text-brand-accent flex items-center justify-center mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" set:html={pilier.icon} />
         </div>
-        <div class="text-xs font-black text-orange-400 mb-1">0{idx + 1}</div>
+        <div class="text-xs font-black text-brand-accent mb-1">0{idx + 1}</div>
         <h3 class="text-base font-bold text-white mb-2 !my-0">{pilier.nom}</h3>
         <p class="text-xs text-slate-400 leading-relaxed mt-1">
           {pilier.desc}

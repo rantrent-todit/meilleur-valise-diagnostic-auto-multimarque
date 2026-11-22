@@ -118,25 +118,25 @@ const breadcrumbs = [
 
   <nav class="flex text-xs text-slate-500 mb-6" aria-label="Breadcrumb">
     <ol class="flex items-center space-x-2">
-      <li><a href="/" class="hover:text-orange-600 transition-colors">Accueil</a></li>
+      <li><a href="/" class="hover:text-brand transition-colors">Accueil</a></li>
       <li><span class="mx-1 text-slate-300">/</span></li>
-      <li><a href="/comparatifs/" class="hover:text-orange-600 transition-colors">Comparatifs</a></li>
+      <li><a href="/comparatifs/" class="hover:text-brand transition-colors">Comparatifs</a></li>
       <li><span class="mx-1 text-slate-300">/</span></li>
       <li class="font-bold text-slate-900 truncate capitalize" aria-current="page">{categoryName}</li>
     </ol>
   </nav>
 
-  <header class="mb-10 max-w-4xl">
-    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-100 border border-orange-200 text-orange-800 text-xs font-black uppercase tracking-wider mb-4">
-      <svg class="w-4 h-4 text-orange-600" viewBox="0 0 20 20" fill="currentColor">
+  <header class="mb-8 max-w-4xl">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-light border border-brand/20 text-brand text-[11px] sm:text-xs font-black uppercase tracking-wider mb-3">
+      <svg class="w-3.5 h-3.5 text-brand" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
       </svg>
       Comparatif Spécialisé & Tests Vérifiés
     </div>
-    <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight capitalize !my-0">
+    <h1 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight capitalize !my-0">
       {pageHeading}
     </h1>
-    <p class="text-base sm:text-lg text-slate-600 mt-4 leading-relaxed">
+    <p class="text-sm sm:text-base text-slate-600 mt-3 leading-relaxed">
       Tests comparatifs vérifiés et guide de sélection pour vous équiper avec le modèle le plus adapté à vos attentes.
     </p>
   </header>
@@ -197,7 +197,7 @@ const breadcrumbs = [
     <section class="my-16">
       <div class="max-w-4xl mx-auto">
         <div class="text-center mb-10">
-          <span class="text-xs font-black uppercase tracking-wider text-orange-600 bg-orange-100 px-3 py-1 rounded-full inline-block mb-3">
+          <span class="text-xs font-black uppercase tracking-wider text-brand bg-brand-light px-3 py-1 rounded-full inline-block mb-3">
             Questions Fréquentes
           </span>
           <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight !my-0">
@@ -210,15 +210,15 @@ const breadcrumbs = [
 
         <div class="space-y-4">
           {content.data.faq.map((item, idx) => (
-            <details class="group bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 transition-all [&_summary::-webkit-details-marker]:hidden open:border-orange-500 open:shadow-sm">
+            <details class="group bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 transition-all [&_summary::-webkit-details-marker]:hidden open:border-brand open:shadow-sm">
               <summary class="flex items-center justify-between cursor-pointer font-extrabold text-slate-900 text-sm sm:text-base select-none">
                 <span class="flex items-center gap-3">
-                  <span class="w-6 h-6 rounded-full bg-orange-100 text-orange-700 font-black text-xs flex items-center justify-center flex-shrink-0">
+                  <span class="w-6 h-6 rounded-full bg-brand-light text-brand font-black text-xs flex items-center justify-center flex-shrink-0">
                     {idx + 1}
                   </span>
                   {item.q}
                 </span>
-                <span class="w-6 h-6 flex items-center justify-center text-slate-400 group-open:text-orange-600 group-open:rotate-180 transition-transform">
+                <span class="w-6 h-6 flex items-center justify-center text-slate-400 group-open:text-brand group-open:rotate-180 transition-transform">
                   <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
                   </svg>

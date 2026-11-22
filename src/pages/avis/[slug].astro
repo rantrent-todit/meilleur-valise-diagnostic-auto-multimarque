@@ -170,9 +170,9 @@ const breadcrumbs = [
 
   <nav class="flex text-xs text-slate-500 mb-6" aria-label="Breadcrumb">
     <ol class="flex items-center space-x-2">
-      <li><a href="/" class="hover:text-orange-600 transition-colors">Accueil</a></li>
+      <li><a href="/" class="hover:text-brand transition-colors">Accueil</a></li>
       <li><span class="mx-1 text-slate-300">/</span></li>
-      <li><a href="/avis/" class="hover:text-orange-600 transition-colors">Avis & Tests</a></li>
+      <li><a href="/avis/" class="hover:text-brand transition-colors">Avis & Tests</a></li>
       <li><span class="mx-1 text-slate-300">/</span></li>
       <li class="font-bold text-slate-900 truncate max-w-xs md:max-w-md" aria-current="page">{product.data.titre}</li>
     </ol>
@@ -210,7 +210,7 @@ const breadcrumbs = [
           {product.data.categories?.map(cat => (
             <a 
               href={`/comparatifs/${slugify(cat)}/`}
-              class="px-3 py-1 bg-slate-100 text-slate-700 hover:bg-orange-100 hover:text-orange-700 text-xs font-bold rounded-full uppercase tracking-wider transition-colors"
+              class="px-3 py-1 bg-slate-100 text-slate-700 hover:bg-brand-light hover:text-brand text-xs font-bold rounded-full uppercase tracking-wider transition-colors"
             >
               {cat}
             </a>
@@ -226,13 +226,13 @@ const breadcrumbs = [
         </p>
 
         <!-- CTA Principal Amazon Bento -->
-        <div class="bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50 border border-orange-200/90 rounded-2xl p-6">
+        <div class="bg-gradient-to-r from-stone-50 via-white to-stone-50 border border-slate-200/90 rounded-2xl p-6 shadow-xs">
           <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <p class="text-xs font-black uppercase tracking-wider text-orange-950 mb-1">
+              <p class="text-xs font-black uppercase tracking-wider text-slate-900 mb-1">
                 Disponibilité & Tarif
               </p>
-              <p class="text-xs text-orange-900/80">
+              <p class="text-xs text-slate-600">
                 Offre officielle vérifiée en direct sur Amazon.fr
               </p>
             </div>
@@ -262,7 +262,7 @@ const breadcrumbs = [
     <!-- BANNIÈRE INTERMÉDIAIRE CRO -->
     <div class="my-10 bg-slate-900 text-white rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
       <div>
-        <span class="text-xs font-black uppercase tracking-wider text-orange-400">Offre Partenaire Vérifiée</span>
+        <span class="text-xs font-black uppercase tracking-wider text-brand-accent">Offre Partenaire Vérifiée</span>
         <h3 class="text-xl font-black text-white !my-1">Consulter les disponibilités actuelles</h3>
         <p class="text-xs text-slate-300">Accédez aux avis d'acheteurs vérifiés et aux meilleures offres en direct sur Amazon.</p>
       </div>
@@ -281,7 +281,7 @@ const breadcrumbs = [
 
     <!-- BLOC FINAL DE CONVERSION -->
     <div class="mt-12 p-8 bg-white rounded-3xl border border-slate-200 text-center max-w-2xl mx-auto shadow-xs">
-      <span class="text-[11px] font-black uppercase tracking-wider text-orange-600 bg-orange-100 px-3 py-1 rounded-full inline-block mb-3">
+      <span class="text-[11px] font-black uppercase tracking-wider text-brand bg-brand-light px-3 py-1 rounded-full inline-block mb-3">
         Conclusion de l'essai
       </span>
       <h3 class="text-xl font-black text-slate-900 mb-2 !my-0">
@@ -303,7 +303,7 @@ const breadcrumbs = [
   {similarProducts.length > 0 && (
     <section class="mt-20 border-t border-slate-200 pt-14">
       <div class="text-center mb-10">
-        <span class="text-xs font-black uppercase tracking-wider text-orange-600">Alternatives Comparées</span>
+        <span class="text-xs font-black uppercase tracking-wider text-brand">Alternatives Comparées</span>
         <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1 !my-0">
           Modèles similaires recommandés
         </h2>

@@ -38,8 +38,8 @@ const productsJson = JSON.stringify(
   <section class="my-10 bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-100">
       <div>
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-orange-100 text-orange-800">
-          <span class="w-2 h-2 rounded-full bg-orange-600 animate-pulse"></span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-brand-light text-brand">
+          <span class="w-2 h-2 rounded-full bg-brand animate-pulse"></span>
           Guide Express en 2 Clics
         </span>
         <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-2 !my-0">
@@ -76,7 +76,7 @@ const productsJson = JSON.stringify(
             2. Votre critère prioritaire :
           </label>
           <div class="flex flex-wrap gap-2" id="selector-priority-group">
-            <button type="button" class="priority-btn text-xs font-bold px-3.5 py-2 rounded-xl border bg-orange-50 text-orange-800 border-orange-300 transition-all cursor-pointer" data-priority="qp">
+            <button type="button" class="priority-btn text-xs font-bold px-3.5 py-2 rounded-xl border bg-brand-light text-brand border-brand transition-all cursor-pointer" data-priority="qp">
               ⭐ Meilleur rapport Qualité / Prix
             </button>
             <button type="button" class="priority-btn text-xs font-bold px-3.5 py-2 rounded-xl border bg-slate-50 text-slate-700 border-slate-200 hover:border-slate-400 transition-all cursor-pointer" data-priority="pro">
@@ -110,10 +110,10 @@ const productsJson = JSON.stringify(
         </p>
 
         <div class="flex items-center gap-2">
-          <a id="selector-result-review" href={`/avis/${firstProduct.id}/`} class="text-xs font-extrabold text-slate-700 hover:text-orange-600 bg-slate-100 hover:bg-slate-200 px-3.5 py-2.5 rounded-xl transition-colors whitespace-nowrap">
+          <a id="selector-result-review" href={`/avis/${firstProduct.id}/`} class="text-xs font-extrabold text-slate-700 hover:text-brand bg-slate-100 hover:bg-slate-200 px-3.5 py-2.5 rounded-xl transition-colors whitespace-nowrap">
             Lire le test
           </a>
-          <a id="selector-result-affiliate" href={firstProduct.data.lien_affiliation} target="_blank" rel="sponsored nofollow noopener noreferrer" class="flex-1 text-center text-xs font-black text-white bg-orange-600 hover:bg-orange-700 px-4 py-2.5 rounded-xl shadow-md transition-all whitespace-nowrap">
+          <a id="selector-result-affiliate" href={firstProduct.data.lien_affiliation} target="_blank" rel="sponsored nofollow noopener noreferrer" class="flex-1 text-center text-xs font-black text-white bg-brand hover:bg-brand-hover px-4 py-2.5 rounded-xl shadow-md transition-all whitespace-nowrap">
             Vérifier le prix &rarr;
           </a>
         </div>
@@ -182,7 +182,7 @@ const productsJson = JSON.stringify(
         priorityBtns.forEach(b => {
           b.className = 'priority-btn text-xs font-bold px-3.5 py-2 rounded-xl border bg-slate-50 text-slate-700 border-slate-200 hover:border-slate-400 transition-all cursor-pointer';
         });
-        btn.className = 'priority-btn text-xs font-bold px-3.5 py-2 rounded-xl border bg-orange-50 text-orange-800 border-orange-300 transition-all cursor-pointer';
+        btn.className = 'priority-btn text-xs font-bold px-3.5 py-2 rounded-xl border bg-brand-light text-brand border-brand transition-all cursor-pointer';
         updateCard();
       });
     });

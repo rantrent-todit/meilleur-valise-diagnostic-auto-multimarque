@@ -42,9 +42,14 @@ const absoluteOgImage = ogImage.startsWith('http')
   ? ogImage 
   : new URL(ogImage, siteUrl).href;
 
-const primaryColor = siteConfig.theme?.primaryColor || "#ea580c";
-const primaryHover = siteConfig.theme?.primaryHoverColor || "#c2410c";
-const accentColor = siteConfig.theme?.accentColor || "#ea580c";
+const primaryColor = siteConfig.theme?.primaryColor || "#1e40af";
+const primaryHover = siteConfig.theme?.primaryHoverColor || "#1d4ed8";
+const accentColor = siteConfig.theme?.accentColor || "#f59e0b";
+
+// Dérivation dynamique des teintes d'arrière-plan et bordures
+const primaryLight = `${primaryColor}14`; // ~8% opacité
+const primaryBorder = `${primaryColor}33`; // ~20% opacité
+const accentHover = siteConfig.theme?.accentColor ? siteConfig.theme.accentColor : "#d97706";
 
 const breadcrumbItems = breadcrumbs && breadcrumbs.length > 0 
   ? breadcrumbs.map((b, idx) => ({
@@ -89,11 +94,14 @@ const breadcrumbItems = breadcrumbs && breadcrumbs.length > 0
 
     <slot name="extra-head" />
 
-    <style define:vars={{ primaryColor, primaryHover, accentColor }}>
+    <style define:vars={{ primaryColor, primaryHover, accentColor, primaryLight, primaryBorder, accentHover }}>
       :root {
         --color-primary: var(--primaryColor);
         --color-primary-hover: var(--primaryHover);
         --color-accent: var(--accentColor);
+        --color-primary-light: var(--primaryLight);
+        --color-primary-border: var(--primaryBorder);
+        --color-accent-hover: var(--accentHover);
       }
     </style>
 
@@ -103,7 +111,7 @@ const breadcrumbItems = breadcrumbs && breadcrumbs.length > 0
       "itemListElement": breadcrumbItems
     })} />
   </head>
-  <body class="bg-[#fafaf8] text-slate-800 font-sans min-h-screen flex flex-col selection:bg-orange-500 selection:text-white">
+  <body class="bg-[#fafaf8] text-slate-800 font-sans min-h-screen flex flex-col selection:bg-brand selection:text-white">
     <!-- Barre éditoriale supérieure -->
     <aside aria-label="Informations éditoriales" class="bg-slate-900 text-slate-300 text-[11px] py-1.5 px-4 border-b border-slate-800">
       <div class="container mx-auto flex items-center justify-between">
@@ -123,20 +131,20 @@ const breadcrumbItems = breadcrumbs && breadcrumbs.length > 0
 
     <!-- Header & Navigation -->
     <header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 shadow-xs">
-      <div class="container mx-auto px-4 py-3.5 flex justify-between items-center max-w-7xl">
-        <a href="/" class="flex items-center gap-3 group">
+      <div class="container mx-auto px-4 py-3 flex justify-between items-center max-w-7xl">
+        <a href="/" class="flex items-center gap-2.5 sm:gap-3 group min-w-0">
           <img 
             src="/favicon.svg" 
             alt={siteConfig.siteName} 
-            class="w-10 h-10 rounded-xl shadow-xs group-hover:scale-105 transition-transform object-contain" 
+            class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl shadow-xs group-hover:scale-105 transition-transform object-contain flex-shrink-0" 
             width="40" 
             height="40"
           />
-          <div>
-            <span class="text-xl font-black text-slate-900 tracking-tight leading-none group-hover:text-orange-600 transition-colors">
+          <div class="min-w-0">
+            <span class="text-base sm:text-lg md:text-xl font-black text-slate-900 tracking-tight leading-none group-hover:text-brand transition-colors truncate block max-w-[190px] sm:max-w-none">
               {siteConfig.siteName}
             </span>
-            <span class="block text-[10px] uppercase font-bold tracking-widest text-slate-500 mt-0.5">
+            <span class="block text-[9px] sm:text-[10px] uppercase font-bold tracking-widest text-slate-500 mt-0.5 truncate">
               Guide & Tests Vérifiés
             </span>
           </div>
@@ -144,11 +152,11 @@ const breadcrumbItems = breadcrumbs && breadcrumbs.length > 0
 
         <!-- Navigation Desktop -->
         <nav class="hidden md:flex items-center space-x-7 font-bold text-sm text-slate-700">
-          <a href="/comparatifs/" class="hover:text-orange-600 transition-colors">Comparatifs</a>
-          <a href="/avis/" class="hover:text-orange-600 transition-colors">Avis & Tests Vérifiés</a>
+          <a href="/comparatifs/" class="hover:text-brand transition-colors">Comparatifs</a>
+          <a href="/avis/" class="hover:text-brand transition-colors">Avis & Tests Vérifiés</a>
           <a 
             href="/comparatifs/" 
-            class="bg-slate-900 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-xs font-black shadow-sm transition-all hover:shadow hover:-translate-y-0.5 flex items-center gap-1.5"
+            class="bg-slate-900 hover:bg-brand text-white px-4 py-2 rounded-xl text-xs font-black shadow-sm transition-all hover:shadow hover:-translate-y-0.5 flex items-center gap-1.5"
           >
             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
@@ -161,7 +169,7 @@ const breadcrumbItems = breadcrumbs && breadcrumbs.length > 0
         <button 
           type="button" 
           id="mobile-menu-btn"
-          class="md:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100 transition-colors"
+          class="md:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100 transition-colors flex-shrink-0 ml-2"
           aria-label="Ouvrir le menu de navigation"
         >
           <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -176,12 +184,12 @@ const breadcrumbItems = breadcrumbs && breadcrumbs.length > 0
         class="hidden md:hidden border-t border-slate-200 bg-white px-5 py-4 shadow-xl"
       >
         <div class="flex flex-col space-y-3 font-bold text-sm text-slate-700">
-          <a href="/" class="py-2 hover:text-orange-600 transition-colors border-b border-slate-100">Accueil</a>
-          <a href="/comparatifs/" class="py-2 hover:text-orange-600 transition-colors border-b border-slate-100">Tous les Comparatifs</a>
-          <a href="/avis/" class="py-2 hover:text-orange-600 transition-colors border-b border-slate-100">Avis & Tests Vérifiés</a>
+          <a href="/" class="py-2 hover:text-brand transition-colors border-b border-slate-100">Accueil</a>
+          <a href="/comparatifs/" class="py-2 hover:text-brand transition-colors border-b border-slate-100">Tous les Comparatifs</a>
+          <a href="/avis/" class="py-2 hover:text-brand transition-colors border-b border-slate-100">Avis & Tests Vérifiés</a>
           <a 
             href="/comparatifs/" 
-            class="mt-2 text-center bg-orange-600 text-white py-2.5 rounded-xl font-black text-xs shadow-sm flex items-center justify-center gap-1.5"
+            class="mt-2 text-center bg-brand text-white py-2.5 rounded-xl font-black text-xs shadow-sm flex items-center justify-center gap-1.5 hover:opacity-95"
           >
             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
@@ -192,7 +200,7 @@ const breadcrumbItems = breadcrumbs && breadcrumbs.length > 0
       </div>
     </header>
 
-    <main class="flex-grow container mx-auto px-4 py-6 md:py-10 max-w-7xl">
+    <main class="flex-grow container mx-auto px-4 py-5 sm:py-6 md:py-10 max-w-7xl pb-24 md:pb-10">
       <slot />
     </main>
 
@@ -216,9 +224,9 @@ const breadcrumbItems = breadcrumbs && breadcrumbs.length > 0
           <div>
             <h4 class="font-extrabold mb-4 text-xs tracking-wider uppercase text-slate-300">Navigation</h4>
             <ul class="space-y-2.5 text-sm text-slate-400">
-              <li><a href="/comparatifs/" class="hover:text-orange-400 transition-colors">Tous les comparatifs</a></li>
-              <li><a href="/avis/" class="hover:text-orange-400 transition-colors">Avis & tests vérifiés</a></li>
-              <li><a href="/mentions-legales/" class="hover:text-orange-400 transition-colors">Mentions Légales & Cookies</a></li>
+              <li><a href="/comparatifs/" class="hover:text-brand-accent transition-colors">Tous les comparatifs</a></li>
+              <li><a href="/avis/" class="hover:text-brand-accent transition-colors">Avis & tests vérifiés</a></li>
+              <li><a href="/mentions-legales/" class="hover:text-brand-accent transition-colors">Mentions Légales & Cookies</a></li>
             </ul>
           </div>
 

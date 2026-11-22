@@ -57,7 +57,7 @@ function getVisual(name: string) {
         Quelle est votre pratique principale ?
       </h2>
     </div>
-    <a href="/comparatifs/" class="text-xs sm:text-sm font-extrabold text-orange-600 hover:text-orange-700 mt-2 md:mt-0 flex items-center gap-1 group">
+    <a href="/comparatifs/" class="text-xs sm:text-sm font-extrabold text-brand hover:text-brand-hover mt-2 md:mt-0 flex items-center gap-1 group">
       Tous les comparatifs par catégorie
       <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
     </a>
@@ -71,20 +71,20 @@ function getVisual(name: string) {
       return (
         <a 
           href={`/comparatifs/${slug}/`}
-          class="bg-white border border-gray-200/90 rounded-2xl p-5 hover:border-orange-500 hover:shadow-lg transition-all duration-200 group flex items-start gap-4 relative overflow-hidden"
+          class="bg-white border border-gray-200/90 rounded-2xl p-5 hover:border-brand hover:shadow-lg transition-all duration-200 group flex items-start gap-4 relative overflow-hidden"
         >
-          <div class="w-12 h-12 flex-shrink-0 bg-stone-100 group-hover:bg-orange-500 text-stone-700 group-hover:text-white rounded-xl flex items-center justify-center transition-colors shadow-sm">
+          <div class="w-12 h-12 flex-shrink-0 bg-stone-100 group-hover:bg-brand text-stone-700 group-hover:text-white rounded-xl flex items-center justify-center transition-colors shadow-sm">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" set:html={visual.icon} />
           </div>
 
           <div class="min-w-0">
-            <h3 class="font-bold text-base text-gray-900 group-hover:text-orange-600 transition-colors capitalize leading-tight !my-0">
+            <h3 class="font-bold text-base text-gray-900 group-hover:text-brand transition-colors capitalize leading-tight !my-0">
               {categoryName}
             </h3>
             <p class="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">
               {visual.desc}
             </p>
-            <span class="inline-flex items-center text-[11px] font-extrabold text-orange-600 mt-2">
+            <span class="inline-flex items-center text-[11px] font-extrabold text-brand mt-2">
               Voir le comparatif
               <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 ml-1 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
