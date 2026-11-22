@@ -1,0 +1,123 @@
+---
+interface CategoryItem {
+  name: string;
+  slug: string;
+  count: number;
+}
+
+interface Props {
+  categories: CategoryItem[];
+  totalCount: number;
+}
+
+const { categories = [], totalCount = 0 } = Astro.props;
+---
+
+<div class="bg-white border border-slate-200/90 rounded-2xl p-4 sm:p-5 mb-8 shadow-xs scroll-mt-28" id="catalogue-filtres">
+  <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between mb-4">
+    <div class="flex items-center gap-2">
+      <span class="text-xs font-black uppercase tracking-wider text-orange-600 bg-orange-100 px-2.5 py-1 rounded-md">
+        Navigation Thématique
+      </span>
+      <span class="text-xs font-bold text-slate-500" id="catalog-count-label">
+        <strong class="text-slate-900" id="catalog-count-number">{totalCount}</strong> modèles testés
+      </span>
+    </div>
+    
+    <a 
+      href="/comparatifs/" 
+      class="text-xs font-extrabold text-orange-600 hover:text-orange-700 inline-flex items-center gap-1 group"
+    >
+      <span>Voir les guides comparatifs détaillés</span>
+      <span class="group-hover:translate-x-0.5 transition-transform">&rarr;</span>
+    </a>
+  </div>
+
+  <!-- Pilules Catégories avec scroll horizontal propre -->
+  <div class="pt-3 border-t border-slate-100 flex items-center gap-2 overflow-x-auto pb-1 text-xs no-scrollbar" id="catalog-category-pills">
+    <button 
+      type="button" 
+      class="cat-pill px-3.5 py-1.5 rounded-lg font-bold whitespace-nowrap bg-slate-900 text-white transition-all cursor-pointer" 
+      data-filter-cat="all"
+    >
+      Tous ({totalCount})
+    </button>
+    {categories.map(c => (
+      <button 
+        type="button" 
+        class="cat-pill px-3 py-1.5 rounded-lg font-bold whitespace-nowrap bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors cursor-pointer" 
+        data-filter-cat={c.slug}
+      >
+        {c.name} {c.count > 0 && <span class="opacity-60 text-[10px]">({c.count})</span>}
+      </button>
+    ))}
+  </div>
+</div>
+
+<!-- État vide si aucune fiche ne correspond -->
+<div id="catalog-empty-state" class="hidden text-center py-12 bg-white rounded-2xl border border-slate-200 p-6 my-8">
+  <h3 class="text-base font-black text-slate-900 mb-1">Aucun modèle dans cette catégorie</h3>
+  <p class="text-xs text-slate-500 mb-4">Consultez l'ensemble de notre catalogue pour découvrir nos tests.</p>
+  <button 
+    type="button" 
+    id="catalog-reset-btn" 
+    class="px-5 py-2.5 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors cursor-pointer"
+  >
+    Afficher tous les modèles
+  </button>
+</div>
+
+<script is:inline>
+  (function() {
+    const pills = document.querySelectorAll('.cat-pill');
+    const countNumber = document.getElementById('catalog-count-number');
+    const emptyState = document.getElementById('catalog-empty-state');
+    const resetBtn = document.getElementById('catalog-reset-btn');
+    const productCards = document.querySelectorAll('[data-product-card]');
+    const container = document.getElementById('products-grid-container');
+
+    let activeCategory = 'all';
+
+    function applyCategoryFilter() {
+      let visibleCount = 0;
+      productCards.forEach(card => {
+        const slugs = (card.dataset.catSlugs || '').split(',');
+        const matchesCat = activeCategory === 'all' || slugs.includes(activeCategory);
+
+        if (matchesCat) {
+          card.style.display = '';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (countNumber) countNumber.textContent = visibleCount;
+      if (emptyState) emptyState.classList.toggle('hidden', visibleCount > 0);
+      if (container) container.classList.toggle('hidden', visibleCount === 0);
+    }
+
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        pills.forEach(p => {
+          p.className = 'cat-pill px-3 py-1.5 rounded-lg font-bold whitespace-nowrap bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors cursor-pointer';
+        });
+        pill.className = 'cat-pill px-3.5 py-1.5 rounded-lg font-bold whitespace-nowrap bg-slate-900 text-white transition-all cursor-pointer';
+        activeCategory = pill.dataset.filterCat || 'all';
+        applyCategoryFilter();
+      });
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        activeCategory = 'all';
+        pills.forEach(p => {
+          p.className = p.dataset.filterCat === 'all' 
+            ? 'cat-pill px-3.5 py-1.5 rounded-lg font-bold whitespace-nowrap bg-slate-900 text-white transition-all cursor-pointer'
+            : 'cat-pill px-3 py-1.5 rounded-lg font-bold whitespace-nowrap bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors cursor-pointer';
+        });
+        applyCategoryFilter();
+      });
+    }
+  })();
+</script>

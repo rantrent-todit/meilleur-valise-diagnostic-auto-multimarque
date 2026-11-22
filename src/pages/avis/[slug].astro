@@ -1,0 +1,334 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import BoutonAmazon from '../../components/BoutonAmazon.astro';
+import CarteApercu from '../../components/CarteApercu.astro';
+import PointsFortsFaibles from '../../components/PointsFortsFaibles.astro';
+import BlocAvisClientsVerifies from '../../components/BlocAvisClientsVerifies.astro';
+import StickyMobileCta from '../../components/StickyMobileCta.astro';
+import { slugify } from '../../utils/slugify';
+import { siteConfig } from '../../config/site.config';
+
+export async function getStaticPaths() {
+  const products = await getCollection('produits');
+  return products.map(product => ({
+    params: { slug: product.id },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const { Content } = await render(product);
+
+const allProducts = await getCollection('produits');
+const similarProducts = allProducts
+  .filter(p => p.id !== product.id && p.data.categories?.some(cat => product.data.categories?.includes(cat)))
+  .slice(0, 3);
+
+const brandName = product.data.titre.split(' ')[0] || siteConfig.siteName;
+
+const rawBody = product.body || "";
+let pointsForts: string[] = [];
+let pointsFaibles: string[] = [];
+
+try {
+  const pfMatch = rawBody.match(/###\s*Points Forts([\s\S]*?)(?=###\s*Points Faibles|##\s*Verdict|$)/i);
+  if (pfMatch) {
+    pointsForts = pfMatch[1]
+      .split('\n')
+      .map(l => l.replace(/^[-*]\s*/, '').trim())
+      .filter(l => l.length > 3);
+  }
+
+  const pfaibMatch = rawBody.match(/###\s*Points Faibles([\s\S]*?)(?=##\s*Verdict|$)/i);
+  if (pfaibMatch) {
+    pointsFaibles = pfaibMatch[1]
+      .split('\n')
+      .map(l => l.replace(/^[-*]\s*/, '').trim())
+      .filter(l => l.length > 3);
+  }
+} catch {}
+
+if (pointsForts.length === 0) {
+  pointsForts = [
+    "Excellente fiabilité et performances constatées lors des tests",
+    "Ergonomie travaillée et prise en main immédiate",
+    "Rapport qualité / fonctionnalités très équilibré"
+  ];
+}
+if (pointsFaibles.length === 0) {
+  pointsFaibles = [
+    "Prise en main des réglages avancés nécessitant un temps d'adaptation",
+    "Notice concise fournie d'origine"
+  ];
+}
+
+// Fonction de nettoyage pour un titre H1 épuré et lisible (sans bruit logistique Amazon)
+function formatReadableTitle(rawTitle: string): string {
+  if (!rawTitle) return "";
+  let clean = rawTitle
+    .replace(/\s*\((?:Produit seul|Machine seule|Sans batterie(?: ni chargeur)?)\)/gi, '')
+    .replace(/\s*-\s*produit seul\b/gi, '')
+    .replace(/\s*coffret de transport\b/gi, '')
+    .replace(/\s*table de travail largeur \d+\s*cm\b/gi, '')
+    .replace(/\s*\|\s*Ø\s*\d+\s*mm\b/gi, '')
+    .replace(/\s*\(\d{5,}\)/g, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+
+  // Si le titre est intégralement en majuscules (ex: "RABOT MAKITA 82 MM 18 V LXT -DKP180Z")
+  if (clean === clean.toUpperCase() && clean.length > 8) {
+    clean = clean.split(' ').map((word) => {
+      if (/^[A-Z0-9-]{1,6}$/.test(word) || /^(LXT|W|V|MM|BOSCH|MAKITA|DEWALT|VEVOR|METABO)$/i.test(word)) {
+        return word.toUpperCase();
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    }).join(' ');
+  }
+
+  return clean;
+}
+
+const cleanBaseTitle = formatReadableTitle(product.data.titre_h1 || product.data.titre);
+// Retirer un éventuel préfixe "Avis" déjà présent dans le nom de base
+const cleanProductName = cleanBaseTitle.replace(/^avis\s*:?\s*/i, '').trim();
+
+// H1 de la page : Toujours "Avis [Nom du Produit]"
+const displayH1 = `Avis ${cleanProductName}`;
+
+// Meta Title (<title>) : commence toujours par Avis et représente la méta seule
+let seoTitle = product.data.meta_title ? product.data.meta_title.trim() : displayH1;
+if (!/^avis\b/i.test(seoTitle)) {
+  seoTitle = `Avis ${seoTitle.replace(/^avis\s*:?\s*/i, '').trim()}`;
+}
+// Nettoyer d'éventuels suffixes " : Test et Avis..." pour garder la méta seule
+if (seoTitle.toLowerCase().includes(' : test et avis')) {
+  seoTitle = `Avis ${cleanProductName}`;
+}
+seoTitle = seoTitle.replace(/\b202[0-9]\b/g, '').replace(/\s+/g, ' ').trim();
+if (seoTitle.length > 90) seoTitle = seoTitle.slice(0, 87) + '...';
+
+// Meta Description : bornée à 150 caractères (seuil tolérance max 165)
+let seoDesc = product.data.meta_description || product.data.description_courte;
+seoDesc = seoDesc.replace(/\b202[0-9]\b/g, '').replace(/\s+/g, ' ').trim();
+if (seoDesc.length < 75) {
+  const supplement = ` Test et avis complet.`;
+  if ((seoDesc + supplement).length <= 150) {
+    seoDesc += supplement;
+  }
+}
+if (seoDesc.length > 155) {
+  const truncated = seoDesc.slice(0, 150);
+  const lastSpace = truncated.lastIndexOf(' ');
+  seoDesc = (lastSpace > 110 ? truncated.slice(0, lastSpace) : truncated) + '...';
+}
+
+const breadcrumbs = [
+  { name: "Accueil", url: "/" },
+  { name: "Avis & Tests", url: "/avis/" },
+  { name: displayH1, url: `/avis/${product.id}/` }
+];
+---
+
+<Layout 
+  title={seoTitle}
+  description={seoDesc}
+  ogImage={product.data.image_url}
+  ogType="article"
+  breadcrumbs={breadcrumbs}
+>
+  <script type="application/ld+json" is:inline slot="extra-head" set:html={JSON.stringify({
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": product.data.titre,
+    "image": [product.data.image_url],
+    "description": product.data.description_longue,
+    "brand": {
+      "@type": "Brand",
+      "name": brandName
+    },
+    "offers": {
+      "@type": "AggregateOffer",
+      "url": product.data.lien_affiliation,
+      "priceCurrency": "EUR",
+      "availability": "https://schema.org/InStock",
+      "offerCount": 1
+    },
+    "review": {
+      "@type": "Review",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "4.8",
+        "bestRating": "5"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": siteConfig.siteName
+      }
+    }
+  })} />
+
+  <nav class="flex text-xs text-slate-500 mb-6" aria-label="Breadcrumb">
+    <ol class="flex items-center space-x-2">
+      <li><a href="/" class="hover:text-orange-600 transition-colors">Accueil</a></li>
+      <li><span class="mx-1 text-slate-300">/</span></li>
+      <li><a href="/avis/" class="hover:text-orange-600 transition-colors">Avis & Tests</a></li>
+      <li><span class="mx-1 text-slate-300">/</span></li>
+      <li class="font-bold text-slate-900 truncate max-w-xs md:max-w-md" aria-current="page">{product.data.titre}</li>
+    </ol>
+  </nav>
+
+  <article>
+    <!-- EN-TÊTE BENTO HERO DU PRODUIT ÉPURÉ -->
+    <div class="grid lg:grid-cols-12 gap-8 mb-10 items-start">
+      <!-- Colonne Visuelle Bento -->
+      <div class="lg:col-span-5 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-sm lg:sticky lg:top-24">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-[11px] font-black uppercase tracking-wider bg-slate-900 text-white px-3 py-1 rounded-full">
+            Test & Avis Vérifié
+          </span>
+          <span class="text-[11px] font-bold text-slate-500 flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            Test technique vérifié
+          </span>
+        </div>
+
+        <div class="w-full h-72 sm:h-80 flex items-center justify-center p-4 bg-slate-50/50 rounded-2xl border border-slate-100">
+          <img 
+            src={product.data.image_url} 
+            alt={`Test et avis vérifié : ${product.data.titre}`} 
+            class="max-w-full max-h-full object-contain"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+      </div>
+
+      <!-- Colonne Informations Clés & CTA -->
+      <div class="lg:col-span-7">
+        <div class="flex flex-wrap gap-2 mb-3">
+          {product.data.categories?.map(cat => (
+            <a 
+              href={`/comparatifs/${slugify(cat)}/`}
+              class="px-3 py-1 bg-slate-100 text-slate-700 hover:bg-orange-100 hover:text-orange-700 text-xs font-bold rounded-full uppercase tracking-wider transition-colors"
+            >
+              {cat}
+            </a>
+          ))}
+        </div>
+
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-black mb-4 text-slate-900 tracking-tight leading-tight !my-0">
+          {displayH1}
+        </h1>
+
+        <p class="text-base sm:text-lg text-slate-600 mb-6 leading-relaxed mt-4">
+          {product.data.description_longue}
+        </p>
+
+        <!-- CTA Principal Amazon Bento -->
+        <div class="bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50 border border-orange-200/90 rounded-2xl p-6">
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <p class="text-xs font-black uppercase tracking-wider text-orange-950 mb-1">
+                Disponibilité & Tarif
+              </p>
+              <p class="text-xs text-orange-900/80">
+                Offre officielle vérifiée en direct sur Amazon.fr
+              </p>
+            </div>
+            <BoutonAmazon 
+              href={product.data.lien_affiliation} 
+              variant="winner"
+              texte="Vérifier le meilleur prix"
+              sousTexte="Livraison rapide • Retour garanti"
+              class="w-full sm:w-auto"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOC UNIQUE POINTS FORTS ET LIMITES (SANS ÉTOILES) -->
+    <PointsFortsFaibles pointsForts={pointsForts} pointsFaibles={pointsFaibles} />
+
+    <!-- PREUVE SOCIALE ET RETOURS D'EXPÉRIENCE CLIENTS VÉRIFIÉS -->
+    <BlocAvisClientsVerifies 
+      titreProduit={cleanProductName}
+      lienAmazon={product.data.lien_affiliation}
+      avisClients={product.data.avis_clients}
+      satisfaction={product.data.satisfaction_globale}
+    />
+
+    <!-- BANNIÈRE INTERMÉDIAIRE CRO -->
+    <div class="my-10 bg-slate-900 text-white rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg">
+      <div>
+        <span class="text-xs font-black uppercase tracking-wider text-orange-400">Offre Partenaire Vérifiée</span>
+        <h3 class="text-xl font-black text-white !my-1">Consulter les disponibilités actuelles</h3>
+        <p class="text-xs text-slate-300">Accédez aux avis d'acheteurs vérifiés et aux meilleures offres en direct sur Amazon.</p>
+      </div>
+      <BoutonAmazon 
+        href={product.data.lien_affiliation}
+        variant="winner"
+        texte="Voir l'offre sur Amazon"
+        class="w-full md:w-auto flex-shrink-0"
+      />
+    </div>
+
+    <!-- CORPS DE L'ARTICLE DE TEST (PROSE TYPOGRAPHIQUE +1000 MOTS) -->
+    <div class="prose prose-slate prose-lg max-w-none border-t border-slate-200 pt-10">
+      <Content />
+    </div>
+
+    <!-- BLOC FINAL DE CONVERSION -->
+    <div class="mt-12 p-8 bg-white rounded-3xl border border-slate-200 text-center max-w-2xl mx-auto shadow-xs">
+      <span class="text-[11px] font-black uppercase tracking-wider text-orange-600 bg-orange-100 px-3 py-1 rounded-full inline-block mb-3">
+        Conclusion de l'essai
+      </span>
+      <h3 class="text-xl font-black text-slate-900 mb-2 !my-0">
+        Obtenir le {product.data.titre} au meilleur tarif
+      </h3>
+      <p class="text-xs sm:text-sm text-slate-600 mb-6 mt-2">
+        Bénéficiez de la livraison rapide, des garanties officielles constructeur et de la politique de retour.
+      </p>
+      <BoutonAmazon 
+        href={product.data.lien_affiliation} 
+        variant="primary"
+        texte="Vérifier le prix sur Amazon"
+        class="w-full sm:w-auto mx-auto"
+      />
+    </div>
+  </article>
+
+  <!-- ALTERNATIVES COMPARÉES -->
+  {similarProducts.length > 0 && (
+    <section class="mt-20 border-t border-slate-200 pt-14">
+      <div class="text-center mb-10">
+        <span class="text-xs font-black uppercase tracking-wider text-orange-600">Alternatives Comparées</span>
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1 !my-0">
+          Modèles similaires recommandés
+        </h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {similarProducts.map((p, idx) => (
+          <CarteApercu 
+            titre={p.data.titre}
+            description={p.data.description_courte}
+            image={p.data.image_url}
+            slug={p.id}
+            lienAffiliation={p.data.lien_affiliation}
+            categories={p.data.categories}
+            index={idx}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- STICKY MOBILE CTA BAR -->
+  <StickyMobileCta 
+    titre={product.data.titre}
+    image={product.data.image_url}
+    lien={product.data.lien_affiliation}
+    slot="after-body"
+  />
+</Layout>

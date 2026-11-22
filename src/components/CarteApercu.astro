@@ -1,0 +1,109 @@
+---
+import { slugify } from '../utils/slugify';
+
+interface Props {
+  titre?: string;
+  description?: string;
+  image?: string;
+  slug?: string;
+  badge?: string;
+  lienAffiliation?: string;
+  categories?: string[];
+  index?: number;
+  id?: string;
+  data?: any;
+}
+
+const rawProps = Astro.props;
+const titre = rawProps.titre || rawProps.data?.titre || '';
+const description = rawProps.description || rawProps.data?.description_courte || rawProps.data?.description_longue || '';
+const image = rawProps.image || rawProps.data?.image_url || '';
+const slug = rawProps.slug || rawProps.id || '';
+const badge = rawProps.badge || '';
+const lienAffiliation = rawProps.lienAffiliation || rawProps.data?.lien_affiliation || '';
+const categories = (rawProps.categories || rawProps.data?.categories || []) as string[];
+const index = rawProps.index || 0;
+
+// Extraire ratio optique éventuel (ex: 8x42)
+const optiqueMatch = titre ? titre.match(/(\d+x\d+)/i) : null;
+const optique = optiqueMatch ? optiqueMatch[1].toLowerCase() : null;
+const categoriesStr = categories.join(' ');
+const categorySlugs = categories.map(c => slugify(c)).join(',');
+const firstCat = categories[0] || "Matériel testé";
+---
+
+<div 
+  class="bg-white rounded-2xl border border-slate-200/90 shadow-xs hover:shadow-lg hover:border-slate-300 transition-all duration-200 flex flex-col overflow-hidden group relative"
+  data-product-card
+  data-title={titre}
+  data-desc={description}
+  data-cats={categoriesStr}
+  data-cat-slugs={categorySlugs}
+  data-index={index}
+>
+  {badge && (
+    <span class="absolute top-3 left-3 z-10 text-[10px] font-black uppercase tracking-wider bg-slate-900 text-white px-2.5 py-1 rounded-full shadow-sm">
+      {badge}
+    </span>
+  )}
+
+  <div class="aspect-[4/3] overflow-hidden bg-slate-50/60 flex items-center justify-center p-6 relative border-b border-slate-100">
+    <img 
+      src={image} 
+      alt={titre} 
+      class="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300"
+      loading="lazy"
+    />
+    {optique && (
+      <span class="absolute bottom-3 right-3 bg-slate-900/80 backdrop-blur-xs text-white text-[11px] font-black px-2 py-0.5 rounded-md">
+        {optique}
+      </span>
+    )}
+  </div>
+
+  <div class="p-5 flex flex-col flex-grow justify-between">
+    <div>
+      <div class="flex items-center justify-between text-xs text-slate-500 mb-2.5">
+        <span class="text-[11px] font-bold uppercase tracking-wider text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md truncate max-w-[150px]">
+          {firstCat}
+        </span>
+        <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
+          Test vérifié
+        </span>
+      </div>
+
+      <h3 class="text-base font-extrabold text-slate-900 mb-2 group-hover:text-orange-600 transition-colors leading-snug !my-0">
+        <a href={`/avis/${slug}/`} class="focus:outline-none focus:underline">
+          {titre}
+        </a>
+      </h3>
+
+      <p class="text-slate-600 text-xs mb-4 line-clamp-3 leading-relaxed mt-2">
+        {description}
+      </p>
+    </div>
+
+    <div class="pt-4 border-t border-slate-100 flex items-center justify-between gap-2 mt-2">
+      <a 
+        href={`/avis/${slug}/`} 
+        class="text-xs font-extrabold text-slate-700 hover:text-orange-600 transition-colors flex items-center gap-1"
+      >
+        Lire le test
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+
+      {lienAffiliation && (
+        <a 
+          href={lienAffiliation}
+          target="_blank"
+          rel="sponsored nofollow noopener noreferrer"
+          class="text-xs font-extrabold bg-orange-600 hover:bg-orange-700 text-white px-3 py-1.5 rounded-lg shadow-sm transition-colors whitespace-nowrap"
+        >
+          Voir prix Amazon
+        </a>
+      )}
+    </div>
+  </div>
+</div>

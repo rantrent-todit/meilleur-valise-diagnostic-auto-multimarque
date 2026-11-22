@@ -1,0 +1,52 @@
+---
+interface Props {
+  href: string;
+  texte?: string;
+  sousTexte?: string;
+  variant?: 'primary' | 'compact' | 'winner' | 'outline';
+  class?: string;
+}
+
+const { 
+  href, 
+  texte = "Vérifier le meilleur prix", 
+  sousTexte,
+  variant = 'primary',
+  class: className = "" 
+} = Astro.props;
+
+const baseStyles = "inline-flex flex-col items-center justify-center font-bold transition-all duration-200 text-center select-none active:scale-[0.98] group relative";
+
+const variantStyles = {
+  primary: "bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-7 py-3.5 rounded-xl shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:-translate-y-0.5",
+  winner: "bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-8 py-4 rounded-xl shadow-xl shadow-orange-500/30 hover:shadow-orange-500/50 hover:-translate-y-1 cta-pulse",
+  compact: "bg-orange-500 hover:bg-orange-600 text-white px-4 py-2.5 text-sm rounded-lg shadow-md hover:shadow-lg shadow-orange-500/20",
+  outline: "bg-white hover:bg-orange-50 text-orange-600 border-2 border-orange-500 px-6 py-3 rounded-xl hover:-translate-y-0.5 shadow-sm"
+};
+---
+
+<a 
+  href={href} 
+  target="_blank" 
+  rel="sponsored nofollow noopener noreferrer" 
+  class:list={[baseStyles, variantStyles[variant], className]}
+>
+  <span class="inline-flex items-center gap-2">
+    <!-- Amazon A icon -->
+    <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M13.9 11.8c-.8.1-1.6.3-2.1.6-.7.4-1.1 1-1.1 1.8 0 1.2.9 2 2.2 2 1 0 1.7-.5 2.1-1.1.2.3.4.6.8.8.4.3.9.4 1.4.4.2 0 .4 0 .6-.1v-1.6c-.2 0-.4.1-.5.1-.4 0-.7-.2-.8-.5l-.1-.4V10c0-1.7-1.1-2.6-3.1-2.6-1.7 0-3 .7-3.4 1.8l1.4.9c.2-.5.8-1 1.9-1 1 0 1.7.5 1.7 1.4v.6l-1.5.7zm.8 1.4v1c-.3.5-.8.8-1.4.8-.6 0-1-.4-1-.9 0-.6.4-1 1-1.1l1.4-.2v.4zm6.8 4.7c-2.3 1.8-5.7 2.7-8.6 2.7-4 0-7.8-1.6-10.6-4.3-.2-.2-.2-.5 0-.7.3-.2.6-.2.8 0 2.5 2.4 6 3.9 9.8 3.9 2.6 0 5.6-.8 7.7-2.4.3-.2.7-.1.9.2.2.3.1.6 0 .7zm.9-.9c-.2-.3-.5-.4-.8-.3l-2.4.9c-.3.1-.4.4-.3.7.1.3.4.4.7.3l1.8-.7c-.2.7-.6 1.4-1.2 1.9-.2.2-.2.5 0 .7.1.1.3.2.4.2.1 0 .2 0 .3-.1.8-.7 1.3-1.6 1.5-2.6 0-.3-.1-.7-.3-1z"/>
+    </svg>
+    <span class={variant === 'compact' ? "font-bold text-sm tracking-tight" : "font-extrabold text-base tracking-tight"}>
+      {texte}
+    </span>
+    <!-- Arrow -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+    </svg>
+  </span>
+  {sousTexte && (
+    <span class="text-[11px] font-normal opacity-90 tracking-wide mt-0.5">
+      {sousTexte}
+    </span>
+  )}
+</a>

@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { siteConfig } from '../config/site.config';
+---
+
+<Layout 
+  title={`Page introuvable (404) | ${siteConfig.siteName}`}
+  description={`La page recherchée n'est plus disponible sur ${siteConfig.siteName}.`}
+  noindex={true}
+>
+  <div class="text-center py-20">
+    <div class="text-9xl font-extrabold text-gray-200 mb-8 select-none">404</div>
+    <h1 class="text-4xl font-bold mb-4">Oups ! Cette page est introuvable.</h1>
+    <p class="text-xl text-gray-600 mb-12 max-w-lg mx-auto leading-relaxed">
+      Il semble que la page, le modèle testé ou le comparatif que vous cherchez ait changé d'adresse ou ne soit plus disponible.
+    </p>
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href="/" class="px-8 py-3 bg-brand text-white font-bold rounded-lg hover:bg-brand-hover transition shadow-lg">Retour à l'accueil</a>
+      <a href="/avis/" class="px-8 py-3 bg-white text-gray-800 font-bold border border-gray-300 rounded-lg hover:bg-gray-50 transition">Voir tous nos avis</a>
+    </div>
+  </div>
+</Layout>

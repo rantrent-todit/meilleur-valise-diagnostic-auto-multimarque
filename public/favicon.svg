@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="100%" height="100%">
+  <defs>
+    <!-- Dégradé principal de fond diagonal -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E3A8A" />
+      <stop offset="60%" stop-color="#00004a" />
+      <stop offset="100%" stop-color="#090d16" />
+    </linearGradient>
+
+    <!-- Lueur subtile accent au sommet -->
+    <radialGradient id="topGlow" cx="25%" cy="15%" r="70%">
+      <stop offset="0%" stop-color="#F97316" stop-opacity="0.55" />
+      <stop offset="50%" stop-color="#1E3A8A" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Ombre douce sous le glyphe -->
+    <filter id="softShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.45" />
+    </filter>
+
+    <!-- Ombre générale du squircle -->
+    <filter id="boxShadow" x="-5%" y="-5%" width="115%" height="115%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#090d16" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Fond Squircle Moderne Style iOS / macOS (rayon 56px) -->
+  <rect 
+    x="12" 
+    y="12" 
+    width="232" 
+    height="232" 
+    rx="56" 
+    ry="56" 
+    fill="url(#bgGrad)" 
+    filter="url(#boxShadow)"
+  />
+
+  <!-- Halo de lumière chaude supérieure -->
+  <rect 
+    x="12" 
+    y="12" 
+    width="232" 
+    height="232" 
+    rx="56" 
+    ry="56" 
+    fill="url(#topGlow)" 
+  />
+
+  <!-- Liseré intérieur biseauté (Glass border) -->
+  <rect 
+    x="14" 
+    y="14" 
+    width="228" 
+    height="228" 
+    rx="54" 
+    ry="54" 
+    fill="none" 
+    stroke="rgba(255, 255, 255, 0.22)" 
+    stroke-width="3" 
+  />
+
+  <!-- Éléments vectoriels de la thématique -->
+  <g filter="url(#softShadow)">
+    
+    <g transform="translate(128, 128) scale(1.15) translate(-128, -128)">
+      <!-- Écusson de confiance -->
+      <path d="M128 36 L196 64 C196 142 162 192 128 214 C94 192 60 142 60 64 Z" fill="rgba(255,255,255,0.16)" stroke="#ffffff" stroke-width="12" stroke-linejoin="round" />
+      <!-- Coche de vérification d'expert -->
+      <path d="M96 122 L118 144 L162 98" fill="none" stroke="#ffffff" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+      <!-- Étoile d'or au sommet -->
+      <polygon points="128,52 133,65 147,65 136,73 140,86 128,78 116,86 120,73 109,65 123,65" fill="#fbbf24" stroke="none" />
+    </g>
+  
+  </g>
+</svg>

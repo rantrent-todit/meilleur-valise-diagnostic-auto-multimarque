@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    color: #1e293b;
+    background-color: #fafaf8;
+  }
+  
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #0f172a;
+    letter-spacing: -0.025em;
+  }
+}
+
+.badge-winner {
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px 0 rgba(234, 88, 12, 0.35);
+}
+
+.badge-top-pick {
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px 0 rgba(22, 163, 74, 0.3);
+}
+
+.cta-pulse {
+  position: relative;
+}
+
+.cta-pulse::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: inherit;
+  border: 2px solid rgba(234, 88, 12, 0.5);
+  animation: pulse-ring 2.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.98); opacity: 0.8; }
+  50% { transform: scale(1.04); opacity: 0; }
+  100% { transform: scale(0.98); opacity: 0; }
+}
+
+/* Scrollbar discrète */
+.table-scrollbar::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+  height: 4px;
+}
+.table-scrollbar::-webkit-scrollbar-track,
+.no-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 9999px;
+}
+.table-scrollbar::-webkit-scrollbar-thumb,
+.no-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}

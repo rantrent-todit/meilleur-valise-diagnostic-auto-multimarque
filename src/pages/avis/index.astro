@@ -1,0 +1,73 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CarteApercu from '../../components/CarteApercu.astro';
+import { getCollection } from 'astro:content';
+import { siteConfig } from '../../config/site.config';
+
+const allProducts = await getCollection('produits');
+
+const breadcrumbs = [
+  { name: "Accueil", url: "/" },
+  { name: "Avis & Tests", url: "/avis/" }
+];
+
+const siteUrl = siteConfig.siteDomain.replace(/\/$/, '');
+const itemListSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": `Tous les tests et avis vérifiés | ${siteConfig.siteName}`,
+  "description": `Consultez nos tests vérifiés indépendants et avis complets sur ${siteConfig.siteName}.`,
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": allProducts.map((p, idx) => ({
+      "@type": "ListItem",
+      "position": idx + 1,
+      "url": `${siteUrl}/avis/${p.id}/`,
+      "name": p.data.titre
+    }))
+  }
+};
+---
+
+<Layout 
+  title={`Tous nos Tests et Avis d'Experts | ${siteConfig.siteName}`}
+  description={`Consultez nos analyses techniques, tests complets et avis impartiaux pour faire le meilleur choix d'équipement sur ${siteConfig.siteName}.`}
+  breadcrumbs={breadcrumbs}
+>
+  <script type="application/ld+json" is:inline slot="extra-head" set:html={JSON.stringify(itemListSchema)} />
+
+  <nav class="flex text-xs text-slate-500 mb-6" aria-label="Breadcrumb">
+    <ol class="flex items-center space-x-2">
+      <li><a href="/" class="hover:text-orange-600 transition-colors">Accueil</a></li>
+      <li><span class="mx-1 text-slate-300">/</span></li>
+      <li class="font-bold text-slate-900" aria-current="page">Avis & Tests</li>
+    </ol>
+  </nav>
+
+  <div class="mb-8">
+    <span class="text-xs font-black uppercase tracking-wider text-orange-600 bg-orange-100 px-3 py-1 rounded-full inline-block mb-3">
+      Nos avis et tests vérifiés
+    </span>
+    <h1 class="text-3xl sm:text-4xl font-black text-slate-900 mb-3 tracking-tight">
+      Tous nos avis et tests de matériel
+    </h1>
+    <p class="text-base text-slate-600 max-w-3xl leading-relaxed">
+      Parcourez nos analyses complètes et indépendantes. Chaque fiche décortique les caractéristiques techniques, les points forts et points faibles ainsi que le rapport qualité-prix.
+    </p>
+  </div>
+
+  <!-- Listing Complet de tous les Produits du Site -->
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {allProducts.map((product, idx) => (
+      <CarteApercu 
+        titre={product.data.titre}
+        description={product.data.description_courte}
+        image={product.data.image_url}
+        slug={product.id}
+        lienAffiliation={product.data.lien_affiliation}
+        categories={product.data.categories}
+        index={idx}
+      />
+    ))}
+  </div>
+</Layout>

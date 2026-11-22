@@ -1,0 +1,411 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CarteApercu from '../components/CarteApercu.astro';
+import TableauComparatif from '../components/TableauComparatif.astro';
+import BlocVerdictTop3 from '../components/BlocVerdictTop3.astro';
+import BadgeConfiance from '../components/BadgeConfiance.astro';
+import BoutonAmazon from '../components/BoutonAmazon.astro';
+import { getCollection } from 'astro:content';
+import { slugify } from '../utils/slugify';
+import { siteConfig } from '../config/site.config';
+
+const allProducts = await getCollection('produits');
+const topPickProduct = allProducts[0];
+const recentProducts = allProducts.slice(0, 6);
+
+const categoryContent = await getCollection('categories');
+const categoryMap = new Map();
+for (const cat of categoryContent) {
+  const name = cat.data.titre_h1 || (cat.data.titre_seo
+    ? cat.data.titre_seo.replace(/^Meilleurs?\s+(modèles\s+)?/i, '').split(':')[0].trim()
+    : cat.id.replace(/-/g, ' '));
+  categoryMap.set(cat.id, name);
+}
+for (const rawName of allProducts.flatMap(p => p.data.categories || [])) {
+  const s = slugify(rawName);
+  if (!categoryMap.has(s)) {
+    categoryMap.set(s, rawName);
+  }
+}
+const allCategories = Array.from(categoryMap.entries())
+  .map(([slug, name]) => {
+    const count = allProducts.filter(p => (p.data.categories || []).some(c => slugify(c) === slug || c === slug)).length;
+    return { slug, name, count };
+  })
+  .filter(c => c.count > 0)
+  .sort((a, b) => b.count - a.count);
+
+const siteUrl = siteConfig.siteDomain.replace(/\/$/, '');
+
+// Déduction intelligente du mot-clé SEO principal (sans branding)
+const derivedKeyword = siteConfig.primaryKeyword || (siteConfig.siteName.toLowerCase().startsWith('meilleur')
+  ? siteConfig.siteName
+  : `Meilleurs modèles ${siteConfig.siteName}`);
+
+const homeTitle = siteConfig.homeSeoTitle || `${derivedKeyword} : Comparatif, Tests & Guide`;
+const homeH1 = siteConfig.homeH1 || derivedKeyword;
+const homeTagline = siteConfig.homeTagline || siteConfig.tagline || "Le guide comparatif et nos tests vérifiés indépendants";
+const homeDescription = siteConfig.homeDescription || siteConfig.description;
+
+// FAQ par défaut enrichie pour le référencement et Schema.org FAQPage (intemporelle, zéro date)
+const faqItems = [
+  {
+    q: "Comment notre équipe sélectionne-t-elle les modèles présentés dans nos comparatifs ?",
+    r: "Notre protocole d'analyse repose sur une étude comparative rigoureuse des caractéristiques techniques, des retours d'expérience vérifiés d'utilisateurs sur le long terme, et de nos tests vérifiés indépendants. Nous évaluons en priorité la fiabilité des composants, l'ergonomie d'utilisation et le rapport qualité-prix réel."
+  },
+  {
+    q: "Quels sont les critères décisifs à étudier avant de finaliser un achat ?",
+    r: "Les trois critères indispensables sont la qualité des matériaux de conception, l'adéquation exacte entre vos besoins réels et les performances annoncées, ainsi que la disponibilité des pièces de rechange et le sérieux du service après-vente du fabricant."
+  },
+  {
+    q: "Les prix affichés sur le comparatif sont-ils actualisés ?",
+    r: "Les liens d'accès partenaires redirigent directement vers les distributeurs officiels vérifiés où les tarifs, promotions et disponibilités des stocks sont actualisés en temps réel afin de vous garantir les conditions d'achat les plus avantageuses."
+  },
+  {
+    q: "Comment entretenir durablement son équipement pour maximiser sa durée de vie ?",
+    r: "Un entretien régulier préventif, comprenant le nettoyage après chaque utilisation, le respect scrupuleux des préconisations du fabricant et le stockage dans un environnement sec et tempéré, permet d'éviter l'usure prématurée et de préserver un niveau de performance optimal au fil des années."
+  }
+];
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": homeH1,
+      "url": `${siteUrl}/`,
+      "description": homeDescription,
+      "inLanguage": "fr-FR",
+      "publisher": {
+        "@type": "Organization",
+        "name": siteConfig.siteName,
+        "url": `${siteUrl}/`,
+        "logo": `${siteUrl}/favicon.svg`
+      }
+    },
+    {
+      "@type": "Organization",
+      "name": siteConfig.siteName,
+      "url": `${siteUrl}/`,
+      "email": siteConfig.contactEmail,
+      "logo": `${siteUrl}/favicon.svg`
+    },
+    ...(allProducts.length > 0 ? [{
+      "@type": "ItemList",
+      "name": `Sélection des Meilleurs Modèles | ${homeH1}`,
+      "description": `Sélection des meilleurs modèles recommandés selon nos tests vérifiés comparatifs.`,
+      "itemListElement": allProducts.slice(0, 3).map((p, idx) => ({
+        "@type": "ListItem",
+        "position": idx + 1,
+        "name": p.data.titre,
+        "url": `${siteUrl}/avis/${p.id}/`
+      }))
+    }] : []),
+    {
+      "@type": "FAQPage",
+      "mainEntity": faqItems.map(item => ({
+        "@type": "Question",
+        "name": item.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": item.r
+        }
+      }))
+    }
+  ]
+};
+---
+
+<Layout
+  title={homeTitle}
+  description={homeDescription}
+  breadcrumbs={[{ name: "Accueil", url: "/" }]}
+>
+  <script type="application/ld+json" is:inline slot="extra-head" set:html={JSON.stringify(websiteSchema)} />
+
+  <!-- HERO SECTION CONVERSION BENTO -->
+  <section class="py-8 md:py-16">
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+      <div class="lg:col-span-7 text-left">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-100 border border-orange-200 text-orange-800 text-xs font-black uppercase tracking-wider mb-6">
+          <svg class="w-4 h-4 text-orange-600" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd" />
+          </svg>
+          Guide Comparatif & Tests Vérifiés Indépendants
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.08] mb-6">
+          {homeH1} : <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-amber-600 to-orange-500">{homeTagline}</span>
+        </h1>
+
+        <p class="text-base sm:text-lg text-slate-600 mb-8 max-w-xl leading-relaxed">
+          {homeDescription}
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+          <a 
+            href="#podium" 
+            class="px-7 py-4 bg-slate-900 hover:bg-slate-800 text-white font-extrabold rounded-xl shadow-lg transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2 text-sm"
+          >
+            <span>Voir le Podium des Gagnants</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </a>
+          <a 
+            href="#guide-achat" 
+            class="px-7 py-4 bg-white text-slate-800 font-extrabold border border-slate-300 rounded-xl hover:bg-slate-50 transition-all text-sm flex items-center justify-center"
+          >
+            Consulter le guide complet
+          </a>
+        </div>
+      </div>
+
+      {topPickProduct && (
+        <div class="lg:col-span-5">
+          <div class="bg-white border-2 border-orange-500 rounded-3xl p-6 sm:p-7 shadow-xl relative overflow-hidden">
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-[11px] font-black uppercase tracking-wider bg-orange-600 text-white px-3 py-1 rounded-full shadow-sm">
+                🏆 Recommandation N°1
+              </span>
+              <span class="text-xs font-black uppercase tracking-wider text-orange-600">Coup de Cœur Rédaction</span>
+            </div>
+
+            <div class="w-full h-52 bg-slate-50/70 rounded-2xl p-4 flex items-center justify-center mb-5 border border-slate-100">
+              <img 
+                src={topPickProduct.data.image_url} 
+                alt={topPickProduct.data.titre} 
+                class="w-full h-full object-contain"
+                loading="eager"
+              />
+            </div>
+
+            <h3 class="font-extrabold text-lg text-slate-900 mb-2 leading-snug !my-0">
+              <a href={`/avis/${topPickProduct.id}/`} class="hover:text-orange-600 transition-colors">
+                {topPickProduct.data.titre}
+              </a>
+            </h3>
+
+            <p class="text-xs text-slate-600 mb-5 line-clamp-2 leading-relaxed mt-2">
+              {topPickProduct.data.description_courte}
+            </p>
+
+            <BoutonAmazon 
+              href={topPickProduct.data.lien_affiliation}
+              variant="winner"
+              texte="Vérifier le meilleur prix"
+              sousTexte="Sur Amazon.fr • Stock vérifié"
+              class="w-full"
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- SOMMAIRE RAPIDE DE NAVIGATION PILIER -->
+  <section class="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 my-8 shadow-xl">
+    <div class="max-w-4xl">
+      <span class="text-xs font-black uppercase tracking-wider text-orange-400">Navigation directe</span>
+      <h2 class="text-xl sm:text-2xl font-black text-white mt-1 mb-4 !my-0">
+        Accès direct aux sélections et guides d'experts
+      </h2>
+      <p class="text-xs sm:text-sm text-slate-300 mb-6 leading-relaxed">
+        Accédez rapidement à nos tests, au tableau comparatif complet ou approfondissez vos critères de choix grâce à notre dossier conseil.
+      </p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-extrabold">
+        <a href="#podium" class="bg-slate-800 hover:bg-orange-600 text-slate-100 hover:text-white p-3.5 rounded-xl border border-slate-700/80 transition-all text-center">
+          🏆 Top 3 Sélections
+        </a>
+        <a href="#tableau-comparatif" class="bg-slate-800 hover:bg-orange-600 text-slate-100 hover:text-white p-3.5 rounded-xl border border-slate-700/80 transition-all text-center">
+          📊 Tableau Top 3
+        </a>
+        <a href="#guide-achat" class="bg-slate-800 hover:bg-orange-600 text-slate-100 hover:text-white p-3.5 rounded-xl border border-slate-700/80 transition-all text-center">
+          📖 Guide d'Achat
+        </a>
+        <a href="#faq" class="bg-slate-800 hover:bg-orange-600 text-slate-100 hover:text-white p-3.5 rounded-xl border border-slate-700/80 transition-all text-center">
+          ❓ FAQ Complète
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PODIUM TOP 3 BENTO -->
+  {allProducts.length >= 3 && (
+    <div id="podium" class="scroll-mt-24">
+      <BlocVerdictTop3 produits={allProducts} />
+    </div>
+  )}
+
+  <!-- TABLEAU COMPARATIF -->
+  {allProducts.length > 0 && (
+    <div id="tableau-comparatif" class="scroll-mt-24">
+      <TableauComparatif 
+        produits={allProducts} 
+        limit={3}
+        titreSection="Tableau Comparatif : Le Top 3 des Meilleurs Modèles"
+        sousTitreSection="Comparaison directe des 3 équipements les plus performants selon nos tests vérifiés"
+      />
+    </div>
+  )}
+
+  <!-- PARCOURIR PAR CATÉGORIE -->
+  {allCategories.length > 0 && (
+    <section class="my-16">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <span class="text-xs font-black uppercase tracking-wider text-orange-600">Catégories & Usages</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1 !my-0">
+            Trouvez selon votre besoin
+          </h2>
+        </div>
+        <a href="/comparatifs/" class="text-xs sm:text-sm font-extrabold text-orange-600 hover:text-orange-700">
+          Toutes les catégories &rarr;
+        </a>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {allCategories.slice(0, 6).map(cat => (
+          <a 
+            href={`/comparatifs/${cat.slug}/`}
+            class="bg-white border border-slate-200/90 rounded-2xl p-5 hover:border-orange-500 hover:shadow-lg transition-all flex items-center justify-between group"
+          >
+            <div>
+              <h3 class="font-bold text-base text-slate-900 group-hover:text-orange-600 capitalize leading-tight !my-0">
+                {cat.name}
+              </h3>
+              <span class="text-xs text-slate-500 mt-1 inline-block">Consulter la sélection</span>
+            </div>
+            <span class="text-orange-600 group-hover:translate-x-1 transition-transform font-bold">&rarr;</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- GUIDE D'ACHAT PILIER SEO TEXTUEL -->
+  <article id="guide-achat" class="my-20 bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-10 lg:p-12 shadow-sm scroll-mt-24">
+    <header class="max-w-3xl mb-12">
+      <span class="text-xs font-black uppercase tracking-wider bg-orange-100 text-orange-800 px-3 py-1 rounded-full inline-block mb-3">
+        Critères d'Évaluation Technique
+      </span>
+      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight !my-0">
+        Guide d'Achat : Les Clés pour Choisir le Meilleur Équipement
+      </h2>
+      <p class="text-base sm:text-lg text-slate-600 mt-4 leading-relaxed">
+        Sélectionner le produit idéal exige de regarder au-delà des arguments commerciaux pour identifier les critères techniques qui font une réelle différence dans la pratique quotidienne.
+      </p>
+    </header>
+
+    <div class="space-y-10 text-slate-700 text-sm sm:text-base leading-relaxed">
+      <section>
+        <h3 class="text-xl sm:text-2xl font-black text-slate-900 mb-4 tracking-tight">
+          1. Définir précisément votre fréquence d'usage et votre niveau d'exigence
+        </h3>
+        <p class="mb-4">
+          La première erreur commise lors de l'achat d'un matériel réside dans le surdimensionnement ou, au contraire, la sous-évaluation des contraintes d'utilisation. Pour un besoin occasionnel, la simplicité de manipulation, la compacité et la facilité de rangement priment sur les options techniques complexes. À l'inverse, pour une utilisation fréquente ou intensive, l'accent doit être mis sans compromis sur la robustesse mécanique des composants, la précision des réglages fins et la résistance à l'usure prématurée.
+        </p>
+      </section>
+
+      <section>
+        <h3 class="text-xl sm:text-2xl font-black text-slate-900 mb-4 tracking-tight">
+          2. La qualité de fabrication et le choix des matériaux de structure
+        </h3>
+        <p class="mb-4">
+          La durabilité d'un modèle se mesure directement à la qualité de ses assemblages. Privilégiez toujours des structures intégrant des métaux usinés (alliages d'aluminium moulé sous pression, acier ou fonte) aux endroits soumis à de fortes contraintes mécaniques, plutôt que des pièces maîtresses entièrement conçues en polymères plastiques. La rigidité structurelle garantit non seulement la longévité de l'appareil, mais assure également une reproductibilité constante des résultats au fil des utilisations répétées.
+        </p>
+      </section>
+
+      <section>
+        <h3 class="text-xl sm:text-2xl font-black text-slate-900 mb-4 tracking-tight">
+          3. L'ergonomie générale, le confort d'utilisation et la sécurité
+        </h3>
+        <p class="mb-4">
+          Un matériel performant doit avant tout être agréable et intuitif à manier. Les organes de commande doivent tomber naturellement sous la main, les molettes et curseurs de réglage doivent comporter des graduations lisibles et précises, et les dispositifs de sécurité doivent fonctionner de manière fluide sans entraver le travail de l'opérateur. L'expérience d'utilisation quotidienne dépend directement de ces détails d'ergonomie qui préviennent la fatigue et renforcent la précision.
+        </p>
+      </section>
+
+      <section>
+        <h3 class="text-xl sm:text-2xl font-black text-slate-900 mb-4 tracking-tight">
+          4. L'écosystème, les accessoires disponibles et le service après-vente
+        </h3>
+        <p>
+          L'achat d'un équipement ne s'arrête pas à la boîte d'origine. Un modèle de marque reconnue vous assure une compatibilité étendue avec de nombreux accessoires d'extension, la garantie de trouver aisément des pièces d'usure de rechange pendant plusieurs années, et une valeur résiduelle supérieure sur le marché de l'occasion en cas de revente.
+        </p>
+      </section>
+    </div>
+  </article>
+
+  <!-- FOIRE AUX QUESTIONS EXPERTE (SCHEMA FAQPAGE) -->
+  <section id="faq" class="my-16 scroll-mt-24">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-10">
+        <span class="text-xs font-black uppercase tracking-wider text-orange-600 bg-orange-100 px-3 py-1 rounded-full inline-block mb-3">
+          Questions Fréquentes
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight !my-0">
+          Foire aux questions : Tout comprendre avant de commander
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600 mt-2">
+          Retrouvez les réponses aux interrogations les plus fréquentes pour concrétiser votre choix en toute sérénité.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        {faqItems.map((item, idx) => (
+          <details class="group bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 transition-all [&_summary::-webkit-details-marker]:hidden open:border-orange-500 open:shadow-sm">
+            <summary class="flex items-center justify-between cursor-pointer font-extrabold text-slate-900 text-sm sm:text-base select-none">
+              <span class="flex items-center gap-3">
+                <span class="w-6 h-6 rounded-full bg-orange-100 text-orange-700 font-black text-xs flex items-center justify-center flex-shrink-0">
+                  {idx + 1}
+                </span>
+                {item.q}
+              </span>
+              <span class="w-6 h-6 flex items-center justify-center text-slate-400 group-open:text-orange-600 group-open:rotate-180 transition-transform">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
+                </svg>
+              </span>
+            </summary>
+            <p class="mt-4 pt-4 border-t border-slate-100 text-xs sm:text-sm text-slate-600 leading-relaxed pl-9">
+              {item.r}
+            </p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- DERNIERS AVIS -->
+  {recentProducts.length > 0 && (
+    <section class="my-16">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <span class="text-xs font-black uppercase tracking-wider text-slate-500">Laboratoire & Tests Vérifiés</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1 !my-0">
+            Derniers tests détaillés
+          </h2>
+        </div>
+        <a href="/avis/" class="text-sm font-extrabold text-orange-600 hover:text-orange-700">
+          Tous les tests &rarr;
+        </a>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {recentProducts.map((product, idx) => (
+          <CarteApercu 
+            titre={product.data.titre}
+            description={product.data.description_courte}
+            image={product.data.image_url}
+            slug={product.id}
+            lienAffiliation={product.data.lien_affiliation}
+            categories={product.data.categories}
+            index={idx}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <BadgeConfiance />
+</Layout>

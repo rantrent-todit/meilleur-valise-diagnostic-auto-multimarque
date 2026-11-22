@@ -1,0 +1,49 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { siteConfig } from '../config/site.config';
+---
+
+<Layout 
+  title={`Mentions Légales & Affiliation | ${siteConfig.siteName}`}
+  description={`Mentions légales, politique de confidentialité et transparence de l'affiliation sur ${siteConfig.siteName}.`}
+>
+  <div class="max-w-3xl mx-auto py-12 prose prose-slate">
+    <h1 class="text-4xl font-extrabold mb-8 text-center !mt-0">Mentions Légales</h1>
+    
+    <h2>1. Présentation du site</h2>
+    <p>
+      Le site <strong>{siteConfig.siteName}</strong> accessible à l'adresse <code>{siteConfig.siteDomain}</code> est un guide d'achat et comparatif indépendant.
+    </p>
+    <p>
+      Contact : <code>{siteConfig.contactEmail}</code>
+    </p>
+
+    <h2>2. Hébergement</h2>
+    <p>
+      Le site est déployé et hébergé mondialement via l'infrastructure sécurisée de :<br>
+      <strong>Cloudflare, Inc.</strong><br>
+      101 Townsend St, San Francisco, CA 94107, USA
+    </p>
+
+    <h2>3. Transparence et Programme d'Affiliation</h2>
+    <p>
+      Le site <strong>{siteConfig.siteName}</strong> participe au Programme Partenaires d’Amazon EU, un programme d’affiliation conçu pour permettre à des sites de percevoir une rémunération grâce à la création de liens vers Amazon.fr.
+    </p>
+    <p>
+      {siteConfig.affiliate.disclaimer}
+    </p>
+    <p>
+      Les prix indiqués ou redirigés ainsi que la disponibilité des produits sont soumis à l'exactitude des données fournies par les plateformes marchandes partenaires au moment de la consultation. L'affiliation n'engendre aucun surcoût pour le lecteur et n'altère en rien l'objectivité de nos analyses.
+    </p>
+
+    <h2>4. Données personnelles et Cookies</h2>
+    <p>
+      Ce site respecte la vie privée de ses utilisateurs et ne collecte aucune donnée personnelle nominative sans consentement. Les seuls traceurs éventuellement déposés sont ceux nécessaires au fonctionnement de l'affiliation (cookies de session d'achat Amazon d'une durée standard de 24h) et à la mesure d'audience anonymisée.
+    </p>
+
+    <h2>5. Propriété intellectuelle</h2>
+    <p>
+      L'ensemble des contenus rédactionnels, analyses et guides présents sur {siteConfig.siteName} sont protégés par le droit d'auteur. Toute reproduction totale ou partielle sans autorisation expresse est prohibée.
+    </p>
+  </div>
+</Layout>

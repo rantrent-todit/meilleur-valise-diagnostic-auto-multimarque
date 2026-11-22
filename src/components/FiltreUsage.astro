@@ -1,0 +1,98 @@
+---
+import { slugify } from '../utils/slugify';
+
+interface Props {
+  categories: string[];
+}
+
+const { categories = [] } = Astro.props;
+
+// Configuration visuelle par type d'usage avec icônes SVG précises
+const categoryVisuals: Record<string, { icon: string; desc: string }> = {
+  "ornithologie": {
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />`,
+    desc: "Suivi rapide, fidélité chromatique & mise au point fine"
+  },
+  "randonnee": {
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />`,
+    desc: "Compacité, légèreté & robustesse en sac à dos"
+  },
+  "astronomie": {
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />`,
+    desc: "Grands diamètres 50mm+ pour captation stellaire"
+  },
+  "chasse": {
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />`,
+    desc: "Haute luminosité au crépuscule & étanchéité azote"
+  },
+  "nocturne": {
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />`,
+    desc: "Capteurs infrarouges & vision thermique avancée"
+  },
+  "compact": {
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />`,
+    desc: "Prismes en toit ultra-légers à emporter partout"
+  }
+};
+
+function getVisual(name: string) {
+  const lower = name.toLowerCase();
+  for (const [key, val] of Object.entries(categoryVisuals)) {
+    if (lower.includes(key)) return val;
+  }
+  return {
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />`,
+    desc: "Comparatif technique et sélection ciblée"
+  };
+}
+---
+
+<div class="my-14">
+  <div class="flex flex-col md:flex-row items-start md:items-end justify-between mb-8">
+    <div>
+      <span class="text-xs font-black uppercase tracking-wider text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">
+        Orientation par Usage
+      </span>
+      <h2 class="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight mt-2 !mb-0">
+        Quelle est votre pratique principale ?
+      </h2>
+    </div>
+    <a href="/comparatifs/" class="text-xs sm:text-sm font-extrabold text-orange-600 hover:text-orange-700 mt-2 md:mt-0 flex items-center gap-1 group">
+      Tous les comparatifs par catégorie
+      <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+    </a>
+  </div>
+
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    {categories.slice(0, 6).map(categoryName => {
+      const visual = getVisual(categoryName);
+      const slug = slugify(categoryName);
+      
+      return (
+        <a 
+          href={`/comparatifs/${slug}/`}
+          class="bg-white border border-gray-200/90 rounded-2xl p-5 hover:border-orange-500 hover:shadow-lg transition-all duration-200 group flex items-start gap-4 relative overflow-hidden"
+        >
+          <div class="w-12 h-12 flex-shrink-0 bg-stone-100 group-hover:bg-orange-500 text-stone-700 group-hover:text-white rounded-xl flex items-center justify-center transition-colors shadow-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" set:html={visual.icon} />
+          </div>
+
+          <div class="min-w-0">
+            <h3 class="font-bold text-base text-gray-900 group-hover:text-orange-600 transition-colors capitalize leading-tight !my-0">
+              {categoryName}
+            </h3>
+            <p class="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">
+              {visual.desc}
+            </p>
+            <span class="inline-flex items-center text-[11px] font-extrabold text-orange-600 mt-2">
+              Voir le comparatif
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 ml-1 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+              </svg>
+            </span>
+          </div>
+        </a>
+      );
+    })}
+  </div>
+</div>

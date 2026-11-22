@@ -1,0 +1,256 @@
+---
+import '../styles/global.css';
+import { siteConfig } from '../config/site.config';
+
+export interface BreadcrumbItem {
+  name: string;
+  url?: string;
+}
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+  breadcrumbs?: BreadcrumbItem[];
+}
+
+const { 
+  title = `${siteConfig.siteName} | ${siteConfig.tagline}`, 
+  description = siteConfig.description,
+  ogImage = "/favicon.svg",
+  ogType = "website",
+  noindex = false,
+  breadcrumbs
+} = Astro.props;
+
+// Troncature et normalisation intelligente de la meta description (max 150-165 car.)
+let safeDescription = (description || siteConfig.description || "").trim().replace(/\s+/g, ' ');
+if (safeDescription.length > 155) {
+  const truncated = safeDescription.slice(0, 150);
+  const lastSpace = truncated.lastIndexOf(' ');
+  safeDescription = (lastSpace > 110 ? truncated.slice(0, lastSpace) : truncated) + '...';
+}
+
+const siteUrl = siteConfig.siteDomain.replace(/\/$/, '');
+const rawPath = Astro.url.pathname;
+const pathname = rawPath.endsWith('/') ? rawPath : `${rawPath}/`;
+const canonicalURL = new URL(pathname, siteUrl).href;
+
+const absoluteOgImage = ogImage.startsWith('http') 
+  ? ogImage 
+  : new URL(ogImage, siteUrl).href;
+
+const primaryColor = siteConfig.theme?.primaryColor || "#ea580c";
+const primaryHover = siteConfig.theme?.primaryHoverColor || "#c2410c";
+const accentColor = siteConfig.theme?.accentColor || "#ea580c";
+
+const breadcrumbItems = breadcrumbs && breadcrumbs.length > 0 
+  ? breadcrumbs.map((b, idx) => ({
+      "@type": "ListItem",
+      "position": idx + 1,
+      "name": b.name,
+      "item": b.url ? new URL(b.url.endsWith('/') ? b.url : `${b.url}/`, siteUrl).href : (idx === breadcrumbs.length - 1 ? canonicalURL : siteUrl)
+    }))
+  : [{
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Accueil",
+      "item": `${siteUrl}/`
+    }];
+---
+
+<!doctype html>
+<html lang="fr" class="bg-stone-50 text-slate-800">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <title>{title}</title>
+    <meta name="description" content={safeDescription} />
+    <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content={siteConfig.siteName} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={safeDescription} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={absoluteOgImage} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={safeDescription} />
+    <meta name="twitter:image" content={absoluteOgImage} />
+
+    <slot name="extra-head" />
+
+    <style define:vars={{ primaryColor, primaryHover, accentColor }}>
+      :root {
+        --color-primary: var(--primaryColor);
+        --color-primary-hover: var(--primaryHover);
+        --color-accent: var(--accentColor);
+      }
+    </style>
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": breadcrumbItems
+    })} />
+  </head>
+  <body class="bg-[#fafaf8] text-slate-800 font-sans min-h-screen flex flex-col selection:bg-orange-500 selection:text-white">
+    <!-- Barre éditoriale supérieure -->
+    <aside aria-label="Informations éditoriales" class="bg-slate-900 text-slate-300 text-[11px] py-1.5 px-4 border-b border-slate-800">
+      <div class="container mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center gap-1.5 text-emerald-400 font-bold">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+            Tests & Avis Vérifiés
+          </span>
+          <span class="hidden sm:inline text-slate-500">•</span>
+          <span class="hidden sm:inline text-slate-400">Analyses indépendantes</span>
+        </div>
+        <div class="text-slate-400 text-[11px] flex items-center gap-2">
+          <span>Transparence & comparatifs certifiés</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 shadow-xs">
+      <div class="container mx-auto px-4 py-3.5 flex justify-between items-center max-w-7xl">
+        <a href="/" class="flex items-center gap-3 group">
+          <img 
+            src="/favicon.svg" 
+            alt={siteConfig.siteName} 
+            class="w-10 h-10 rounded-xl shadow-xs group-hover:scale-105 transition-transform object-contain" 
+            width="40" 
+            height="40"
+          />
+          <div>
+            <span class="text-xl font-black text-slate-900 tracking-tight leading-none group-hover:text-orange-600 transition-colors">
+              {siteConfig.siteName}
+            </span>
+            <span class="block text-[10px] uppercase font-bold tracking-widest text-slate-500 mt-0.5">
+              Guide & Tests Vérifiés
+            </span>
+          </div>
+        </a>
+
+        <!-- Navigation Desktop -->
+        <nav class="hidden md:flex items-center space-x-7 font-bold text-sm text-slate-700">
+          <a href="/comparatifs/" class="hover:text-orange-600 transition-colors">Comparatifs</a>
+          <a href="/avis/" class="hover:text-orange-600 transition-colors">Avis & Tests Vérifiés</a>
+          <a 
+            href="/comparatifs/" 
+            class="bg-slate-900 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-xs font-black shadow-sm transition-all hover:shadow hover:-translate-y-0.5 flex items-center gap-1.5"
+          >
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+            </svg>
+            Voir les Comparatifs
+          </a>
+        </nav>
+
+        <!-- Bouton Menu Mobile Hamburger -->
+        <button 
+          type="button" 
+          id="mobile-menu-btn"
+          class="md:hidden p-2 rounded-xl text-slate-700 hover:bg-slate-100 transition-colors"
+          aria-label="Ouvrir le menu de navigation"
+        >
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Menu Mobile Drawer -->
+      <div 
+        id="mobile-drawer" 
+        class="hidden md:hidden border-t border-slate-200 bg-white px-5 py-4 shadow-xl"
+      >
+        <div class="flex flex-col space-y-3 font-bold text-sm text-slate-700">
+          <a href="/" class="py-2 hover:text-orange-600 transition-colors border-b border-slate-100">Accueil</a>
+          <a href="/comparatifs/" class="py-2 hover:text-orange-600 transition-colors border-b border-slate-100">Tous les Comparatifs</a>
+          <a href="/avis/" class="py-2 hover:text-orange-600 transition-colors border-b border-slate-100">Avis & Tests Vérifiés</a>
+          <a 
+            href="/comparatifs/" 
+            class="mt-2 text-center bg-orange-600 text-white py-2.5 rounded-xl font-black text-xs shadow-sm flex items-center justify-center gap-1.5"
+          >
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+            </svg>
+            Voir les Comparatifs
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-6 md:py-10 max-w-7xl">
+      <slot />
+    </main>
+
+    <!-- Footer épuré Bento -->
+    <footer class="bg-slate-950 text-white pt-14 pb-10 border-t border-slate-800 mt-20">
+      <div class="container mx-auto px-4 max-w-7xl">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
+          <div class="md:col-span-2">
+            <span class="text-lg font-black text-white">{siteConfig.siteName}</span>
+            <p class="text-slate-400 text-sm leading-relaxed max-w-md mt-2">
+              {siteConfig.description}
+            </p>
+            <div class="mt-4 flex items-center gap-2 text-xs text-emerald-400 font-bold">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Méthodologie indépendante & tests vérifiés
+            </div>
+          </div>
+
+          <div>
+            <h4 class="font-extrabold mb-4 text-xs tracking-wider uppercase text-slate-300">Navigation</h4>
+            <ul class="space-y-2.5 text-sm text-slate-400">
+              <li><a href="/comparatifs/" class="hover:text-orange-400 transition-colors">Tous les comparatifs</a></li>
+              <li><a href="/avis/" class="hover:text-orange-400 transition-colors">Avis & tests vérifiés</a></li>
+              <li><a href="/mentions-legales/" class="hover:text-orange-400 transition-colors">Mentions Légales & Cookies</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="font-extrabold mb-4 text-xs tracking-wider uppercase text-slate-300">Transparence</h4>
+            <p class="text-slate-400 text-xs leading-relaxed">
+              {siteConfig.affiliate?.disclaimer || "En tant que Partenaire Amazon, nous réalisons un bénéfice sur les achats remplissant les conditions requises."}
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-4 flex flex-col sm:flex-row items-center justify-between text-slate-400 text-xs gap-3">
+          <div>{siteConfig.siteName} — Guide d'achat et comparatif indépendant.</div>
+          <div class="flex items-center gap-4">
+            <a href="/mentions-legales/" class="hover:text-slate-300">Confidentialité</a>
+            <span>•</span>
+            <a href="/mentions-legales/" class="hover:text-slate-300">Mentions Légales</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script is:inline>
+      const menuBtn = document.getElementById('mobile-menu-btn');
+      const drawer = document.getElementById('mobile-drawer');
+      if (menuBtn && drawer) {
+        menuBtn.addEventListener('click', () => {
+          drawer.classList.toggle('hidden');
+        });
+      }
+    </script>
+
+    <slot name="after-body" />
+  </body>
+</html>
