@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { slugify } from '../../utils/slugify';
+import { formatCategoryLabel } from '../../utils/formatCategory';
 import { siteConfig } from '../../config/site.config';
 
 const allProducts = await getCollection('produits');
@@ -11,14 +12,10 @@ const categoryContent = await getCollection('categories');
 const categoryMap = new Map();
 
 for (const cat of categoryContent) {
-  const name = cat.data.titre_h1 || (cat.data.titre_seo
-    ? cat.data.titre_seo.replace(/^Meilleurs?\s+(modèles\s+)?/i, '').split(':')[0].trim()
-    : cat.id.replace(/-/g, ' '));
-
+  const name = cat.data.titre_h1 || formatCategoryLabel(cat.id);
   categoryMap.set(cat.id, {
     slug: cat.id,
-    name,
-    description: cat.data.description_seo || `Découvrez notre guide comparatif complet et notre sélection pour ${name}.`
+    name
   });
 }
 
@@ -28,28 +25,19 @@ for (const p of allProducts) {
     if (!categoryMap.has(s)) {
       categoryMap.set(s, {
         slug: s,
-        name: rawName,
-        description: `Découvrez notre sélection des meilleurs modèles pour la catégorie ${rawName}.`
+        name: formatCategoryLabel(s)
       });
     }
   }
 }
 
 // Calculer le nombre de produits pour chaque catégorie et filtrer les catégories vides
-const allCategories = Array.from(categoryMap.values()).map(cat => {
-  const count = allProducts.filter(p => {
+const allCategories = Array.from(categoryMap.values()).filter(cat => {
+  return allProducts.some(p => {
     const cats = p.data.categories || [];
     return cats.some(c => slugify(c) === cat.slug || c === cat.slug);
-  }).length;
-
-  return {
-    ...cat,
-    count
-  };
-}).filter(cat => cat.count > 0).sort((a, b) => {
-  if (b.count !== a.count) return b.count - a.count;
-  return a.name.localeCompare(b.name);
-});
+  });
+}).sort((a, b) => a.name.localeCompare(b.name));
 
 const breadcrumbs = [
   { name: "Accueil", url: "/" },
@@ -60,8 +48,8 @@ const siteUrl = siteConfig.siteDomain.replace(/\/$/, '');
 const collectionSchema = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  "name": "Tous nos comparatifs par catégorie",
-  "description": "Accédez à nos guides comparatifs par usage et catégorie.",
+  "name": `Nos comparatifs de ${siteConfig.siteName}`,
+  "description": `Sélectionnez une catégorie pour accéder au top des produits recommandés par nos experts.`,
   "mainEntity": {
     "@type": "ItemList",
     "itemListElement": allCategories.map((c, idx) => ({
@@ -75,8 +63,8 @@ const collectionSchema = {
 ---
 
 <Layout 
-  title="Tous nos Comparatifs de Produits : Les Meilleurs Modèles"
-  description="Accédez à l'ensemble de nos guides comparatifs par usage et catégorie. Trouvez le meilleur équipement au prix le plus juste."
+  title={`Tous nos Comparatifs : Les Meilleurs Modèles | ${siteConfig.siteName}`}
+  description={`Accédez à l'ensemble de nos guides comparatifs par usage et catégorie. Trouvez le meilleur équipement au prix le plus juste.`}
   breadcrumbs={breadcrumbs}
 >
   <script type="application/ld+json" is:inline slot="extra-head" set:html={JSON.stringify(collectionSchema)} />
@@ -89,42 +77,47 @@ const collectionSchema = {
     </ol>
   </nav>
 
-  <div class="mb-10 max-w-3xl">
+  <header class="mb-10 max-w-3xl">
     <span class="text-xs font-black uppercase tracking-wider text-brand bg-brand-light px-3 py-1 rounded-full inline-block mb-3">
       Guides & Comparatifs
     </span>
     <h1 class="text-3xl sm:text-4xl font-black text-slate-900 mb-3 tracking-tight">
-      Nos comparatifs de modèles
+      Nos comparatifs de {siteConfig.siteName}
     </h1>
     <p class="text-base text-slate-600 leading-relaxed">
-      Sélectionnez une catégorie pour explorer nos tests comparatifs vérifiés et notre sélection rigoureuse des modèles les plus fiables.
+      Sélectionnez une catégorie ci-dessous pour accéder au top des produits recommandés par nos experts selon vos besoins spécifiques.
     </p>
-  </div>
+  </header>
 
   <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
     {allCategories.map(cat => (
       <a 
         href={`/comparatifs/${cat.slug}/`}
-        class="bg-white border border-slate-200/90 rounded-2xl p-6 hover:border-brand hover:shadow-lg transition-all flex flex-col justify-between group"
+        class="group bg-white p-8 rounded-3xl border border-slate-200/90 shadow-xs hover:border-brand hover:shadow-md transition-all flex flex-col justify-between"
       >
         <div>
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-xs font-black text-brand uppercase tracking-wider bg-brand-light px-2.5 py-1 rounded-md">
-              {cat.count} référence{cat.count > 1 ? 's' : ''}
-            </span>
+          <div class="inline-flex items-center justify-center w-12 h-12 bg-brand-light text-brand rounded-2xl mb-6 group-hover:bg-brand group-hover:text-white transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
           </div>
-          <h2 class="font-bold text-xl text-slate-900 group-hover:text-brand capitalize leading-tight mb-2 !my-0">
+          <h2 class="text-xl font-bold text-slate-900 mb-4 group-hover:text-brand transition-colors">
             {cat.name}
           </h2>
-          <p class="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-            {cat.description}
-          </p>
         </div>
-        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-extrabold text-brand">
-          <span>Consulter le comparatif</span>
-          <span class="group-hover:translate-x-1 transition-transform font-bold text-base">&rarr;</span>
+        <div class="mt-4 flex items-center text-brand font-bold text-sm">
+          Voir le comparatif
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7" />
+          </svg>
         </div>
       </a>
     ))}
   </div>
+
+  {allCategories.length === 0 && (
+    <div class="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
+      <p class="text-slate-500 font-medium italic">Aucune catégorie détectée.</p>
+    </div>
+  )}
 </Layout>

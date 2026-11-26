@@ -1,9 +1,10 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import CarteApercu from '../../components/CarteApercu.astro';
-import TableauComparatif from '../../components/TableauComparatif.astro';
+import BlocVerdictTop3 from '../../components/BlocVerdictTop3.astro';
+import BadgeConfiance from '../../components/BadgeConfiance.astro';
 import { slugify } from '../../utils/slugify';
+import { formatCategoryLabel } from '../../utils/formatCategory';
 
 export async function getStaticPaths() {
   const allProducts = await getCollection('produits');
@@ -17,7 +18,7 @@ export async function getStaticPaths() {
     const slug = cat.id;
     const name = cat.data.titre_h1 || (cat.data.titre_seo
       ? cat.data.titre_seo.replace(/^Meilleurs?\s+(modèles\s+)?/i, '').split(':')[0].trim()
-      : cat.id.replace(/-/g, ' '));
+      : formatCategoryLabel(cat.id));
 
     pathsMap.set(slug, {
       slug,
@@ -33,7 +34,7 @@ export async function getStaticPaths() {
       if (!pathsMap.has(s)) {
         pathsMap.set(s, {
           slug: s,
-          categoryName: rawCat,
+          categoryName: formatCategoryLabel(s),
           content: null
         });
       }
@@ -62,7 +63,41 @@ export async function getStaticPaths() {
 const { categoryName, products = [], content, slug } = Astro.props;
 const Content = content ? (await render(content)).Content : null;
 
-// SEO Title (pour la balise <title> SERP, sans aucun branding parasite)
+// Algorithme de scoring de conversion Top 3 : Marque + Prix sérieux + Volume Avis + Note
+const scoredProducts = products.map(p => {
+  let score = 0;
+  const title = (p.data.titre || '').trim();
+  const firstWord = title.split(' ')[0] || '';
+  const isGeneric = /^(inverter|convertisseur|poste|raboteuse|decoupeur|scooter|valise|controleur|remontoir|jumelle)/i.test(firstWord);
+
+  // 1. Bonus Marque détectée (+500 pts)
+  if (!isGeneric && firstWord.length > 2) {
+    score += 500;
+  }
+
+  // 2. Bonus Panier sérieux (> 80 € : +200 pts, gadget < 50 € : -150 pts)
+  const prixNum = parseFloat((p.data.prix || '0').replace(',', '.'));
+  if (prixNum >= 80) {
+    score += 200;
+  } else if (prixNum > 0 && prixNum < 50) {
+    score -= 150;
+  }
+
+  // 3. Bonus Preuve Sociale (Volume total d'avis clients)
+  const totalAvis = p.data.satisfaction_globale?.total_avis || 0;
+  score += Math.min(Math.log10(Math.max(totalAvis, 1)) * 100, 350);
+
+  // 4. Bonus Note de satisfaction client
+  const note = p.data.satisfaction_globale?.note_moyenne || 4.0;
+  score += (note - 4.0) * 200;
+
+  return { produit: p, score };
+});
+
+const sortedScored = [...scoredProducts].sort((a, b) => b.score - a.score);
+const top3Products = sortedScored.slice(0, 3).map(item => item.produit);
+
+// SEO Title (sans branding parasite ni dates)
 let seoTitle = content?.data.titre_seo || `Meilleurs modèles ${categoryName} : Guide et Comparatif`;
 seoTitle = seoTitle.replace(/\s*\|\s*.*$/i, '').replace(/\b202[0-9]\b/g, '').replace(/\s+/g, ' ').trim();
 if (!seoTitle.toLowerCase().startsWith('meilleur')) {
@@ -70,7 +105,7 @@ if (!seoTitle.toLowerCase().startsWith('meilleur')) {
 }
 if (seoTitle.length > 90) seoTitle = seoTitle.slice(0, 87) + '...';
 
-// H1 Lisible, percutant et sans branding
+// H1 Lisible et percutant
 const pageHeading = content?.data.titre_h1 || (categoryName.toLowerCase().startsWith('meilleur') 
   ? categoryName 
   : `Comparatif : ${categoryName}`);
@@ -94,6 +129,20 @@ const breadcrumbs = [
   { name: "Comparatifs", url: "/comparatifs/" },
   { name: categoryName, url: `/comparatifs/${slug}/` }
 ];
+
+// Schema ItemList pour le podium
+const itemListJsonLd = top3Products.length > 0 ? {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": `Top 3 ${categoryName}`,
+  "numberOfItems": top3Products.length,
+  "itemListElement": top3Products.map((p, index) => ({
+    "@type": "ListItem",
+    "position": index + 1,
+    "name": p.data.titre,
+    "url": `/avis/${p.id}/`
+  }))
+} : null;
 ---
 
 <Layout 
@@ -101,6 +150,9 @@ const breadcrumbs = [
   description={seoDescription}
   breadcrumbs={breadcrumbs}
 >
+  {itemListJsonLd && (
+    <script type="application/ld+json" is:inline slot="extra-head" set:html={JSON.stringify(itemListJsonLd)} />
+  )}
   {content?.data.faq && content.data.faq.length > 0 && (
     <script type="application/ld+json" is:inline slot="extra-head" set:html={JSON.stringify({
       "@context": "https://schema.org",
@@ -137,59 +189,29 @@ const breadcrumbs = [
       {pageHeading}
     </h1>
     <p class="text-sm sm:text-base text-slate-600 mt-3 leading-relaxed">
-      Tests comparatifs vérifiés et guide de sélection pour vous équiper avec le modèle le plus adapté à vos attentes.
+      {seoDescription}
     </p>
   </header>
 
-  {products.length > 0 && (
-    <TableauComparatif 
-      produits={products}
-      limit={3}
-      titreSection={`Tableau Comparatif : Top 3 ${categoryName}`}
-      sousTitreSection="Les 3 modèles les plus convaincants de la catégorie selon nos tests vérifiés"
+  <!-- PODIUM TOP 3 EXCLUSIF DE CONVERSION -->
+  {top3Products.length >= 2 && (
+    <BlocVerdictTop3 
+      produits={top3Products}
+      titre={`Podium : ${categoryName}`}
+      sousTitre="Les modèles incontournables sélectionnés pour leur fiabilité, performance et satisfaction client vérifiée"
     />
   )}
 
+  <!-- BADGE DE RÉASSURANCE -->
+  <BadgeConfiance titre="Notre Protocole d'Évaluation Indépendant" />
+
+  <!-- GUIDE D'ACHAT DÉTAILLÉ DE LA CATÉGORIE -->
   {content && (
     <section class="bg-white p-6 sm:p-10 rounded-3xl border border-gray-200 shadow-sm my-12">
       <div class="prose prose-slate prose-lg max-w-none">
         <Content />
       </div>
     </section>
-  )}
-
-  {products.length > 0 ? (
-    <section class="my-14">
-      <div class="flex items-center justify-between mb-8 pb-3 border-b border-gray-200">
-        <div>
-          <h2 class="text-2xl font-black text-slate-900 tracking-tight !my-0 capitalize">
-            Tous les modèles retenus en {categoryName}
-          </h2>
-          <p class="text-xs text-slate-500 mt-1">Fiches techniques détaillées et avis vérifiés d'experts</p>
-        </div>
-        <span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
-          {products.length} référence{products.length > 1 ? 's' : ''}
-        </span>
-      </div>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.map((product, idx) => (
-          <CarteApercu 
-            titre={product.data.titre}
-            description={product.data.description_courte}
-            image={product.data.image_url}
-            slug={product.id}
-            lienAffiliation={product.data.lien_affiliation}
-            categories={product.data.categories}
-            index={idx}
-          />
-        ))}
-      </div>
-    </section>
-  ) : (
-    <div class="text-center py-16 bg-white rounded-3xl border border-dashed border-slate-300">
-      <p class="text-slate-500 font-medium">Aucun produit n'est actuellement associé à cette catégorie.</p>
-    </div>
   )}
 
   <!-- FAQ DE LA CATÉGORIE (SCHEMA.ORG FAQPAGE) -->

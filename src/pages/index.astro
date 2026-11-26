@@ -1,17 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import CarteApercu from '../components/CarteApercu.astro';
-import TableauComparatif from '../components/TableauComparatif.astro';
 import BlocVerdictTop3 from '../components/BlocVerdictTop3.astro';
 import BadgeConfiance from '../components/BadgeConfiance.astro';
 import BoutonAmazon from '../components/BoutonAmazon.astro';
 import { getCollection } from 'astro:content';
 import { slugify } from '../utils/slugify';
+import { formatCategoryLabel } from '../utils/formatCategory';
 import { siteConfig } from '../config/site.config';
 
 const allProducts = await getCollection('produits');
 const topPickProduct = allProducts[0];
-const recentProducts = allProducts.slice(0, 6);
+const otherProducts = allProducts.length > 3 ? allProducts.slice(3, 6) : allProducts.slice(0, 3);
 
 const categoryContent = await getCollection('categories');
 const categoryMap = new Map();
@@ -217,8 +217,8 @@ const websiteSchema = {
         <a href="#podium" class="bg-slate-800 hover:bg-brand text-slate-100 hover:text-white p-3 rounded-xl border border-slate-700/80 transition-all text-center">
           🏆 Top 3 Sélections
         </a>
-        <a href="#tableau-comparatif" class="bg-slate-800 hover:bg-brand text-slate-100 hover:text-white p-3 rounded-xl border border-slate-700/80 transition-all text-center">
-          📊 Tableau Top 3
+        <a href="#categories" class="bg-slate-800 hover:bg-brand text-slate-100 hover:text-white p-3 rounded-xl border border-slate-700/80 transition-all text-center">
+          📂 Catégories & Usages
         </a>
         <a href="#guide-achat" class="bg-slate-800 hover:bg-brand text-slate-100 hover:text-white p-3 rounded-xl border border-slate-700/80 transition-all text-center">
           📖 Guide d'Achat
@@ -237,21 +237,9 @@ const websiteSchema = {
     </div>
   )}
 
-  <!-- TABLEAU COMPARATIF -->
-  {allProducts.length > 0 && (
-    <div id="tableau-comparatif" class="scroll-mt-24">
-      <TableauComparatif 
-        produits={allProducts} 
-        limit={3}
-        titreSection="Tableau Comparatif : Le Top 3 des Meilleurs Modèles"
-        sousTitreSection="Comparaison directe des 3 équipements les plus performants selon nos tests vérifiés"
-      />
-    </div>
-  )}
-
   <!-- PARCOURIR PAR CATÉGORIE -->
   {allCategories.length > 0 && (
-    <section class="my-14">
+    <section id="categories" class="my-14 scroll-mt-24">
       <div class="flex flex-wrap sm:flex-nowrap items-baseline sm:items-center justify-between gap-2 mb-6 sm:mb-8">
         <div>
           <span class="text-xs font-black uppercase tracking-wider text-brand">Catégories & Usages</span>
@@ -272,7 +260,7 @@ const websiteSchema = {
           >
             <div>
               <h3 class="font-bold text-base text-slate-900 group-hover:text-brand capitalize leading-tight !my-0">
-                {cat.name}
+                {formatCategoryLabel(cat.slug || cat.name)}
               </h3>
               <span class="text-xs text-slate-500 mt-1 inline-block">Consulter la sélection</span>
             </div>
@@ -376,14 +364,14 @@ const websiteSchema = {
     </div>
   </section>
 
-  <!-- DERNIERS AVIS -->
-  {recentProducts.length > 0 && (
+  <!-- AUTRES MODÈLES ANALYSÉS -->
+  {otherProducts.length > 0 && (
     <section class="my-16">
       <div class="flex items-center justify-between mb-8">
         <div>
           <span class="text-xs font-black uppercase tracking-wider text-slate-500">Laboratoire & Tests Vérifiés</span>
           <h2 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1 !my-0">
-            Derniers tests détaillés
+            Autres modèles analysés par la rédaction
           </h2>
         </div>
         <a href="/avis/" class="text-sm font-extrabold text-brand hover:text-brand-hover">
@@ -392,7 +380,7 @@ const websiteSchema = {
       </div>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {recentProducts.map((product, idx) => (
+        {otherProducts.map((product, idx) => (
           <CarteApercu 
             titre={product.data.titre}
             description={product.data.description_courte}
