@@ -16,9 +16,7 @@ export async function getStaticPaths() {
   // 1. Ajouter toutes les catégories déclarées dans content/categories
   for (const cat of categoryContent) {
     const slug = cat.id;
-    const name = cat.data.titre_h1 || (cat.data.titre_seo
-      ? cat.data.titre_seo.replace(/^Meilleurs?\s+(modèles\s+)?/i, '').split(':')[0].trim()
-      : formatCategoryLabel(cat.id));
+    const name = formatCategoryLabel(cat.id);
 
     pathsMap.set(slug, {
       slug,
@@ -197,8 +195,7 @@ const itemListJsonLd = top3Products.length > 0 ? {
   {top3Products.length >= 2 && (
     <BlocVerdictTop3 
       produits={top3Products}
-      titre={`Podium : ${categoryName}`}
-      sousTitre="Les modèles incontournables sélectionnés pour leur fiabilité, performance et satisfaction client vérifiée"
+      sousTitre="Les 3 modèles incontournables sélectionnés pour leur fiabilité, performance et satisfaction vérifiée"
     />
   )}
 

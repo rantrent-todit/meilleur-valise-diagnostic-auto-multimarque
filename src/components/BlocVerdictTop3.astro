@@ -20,8 +20,8 @@ interface Props {
 
 const { 
   produits = [],
-  titre = "Le Podium : Les 3 Modèles Recommandés par la Rédaction",
-  sousTitre = "Pour ceux qui veulent faire le bon choix immédiatement sans hésiter"
+  titre,
+  sousTitre = "Les 3 modèles incontournables sélectionnés pour leur fiabilité, performance et satisfaction vérifiée"
 } = Astro.props;
 
 const top3 = produits.slice(0, 3);
@@ -35,16 +35,20 @@ const third = top3[2] || top3[0];
 <section class="my-14">
   <!-- En-tête de section centré -->
   <div class="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
-    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-brand-light text-brand mb-2">
-      <span class="w-2 h-2 rounded-full bg-brand animate-pulse"></span>
+    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 mb-2">
+      <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
       Verdict Immédiat de la Rédaction
     </span>
-    <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight !my-0">
-      {titre}
-    </h2>
-    <p class="text-slate-600 text-sm sm:text-base mt-2">
-      {sousTitre}
-    </p>
+    {titre && (
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 tracking-tight !my-0">
+        {titre}
+      </h2>
+    )}
+    {sousTitre && (
+      <p class="text-slate-600 text-sm sm:text-base mt-2">
+        {sousTitre}
+      </p>
+    )}
   </div>
 
   <!-- Grille épurée 3 colonnes -->
